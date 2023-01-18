@@ -97,8 +97,7 @@
 				"allOf": [
 					{
 						"if": {
-							"properties": { "type": {"const":"origins:crafting_recipe"} },
-							"required": ["type"]
+							"properties": { "type": {"const":"origins:crafting_recipe"} }, "required": ["type"]
 						},
 						"then": {
 							"properties": {
@@ -119,8 +118,7 @@
 						}
 					}, {
 						"if": {
-							"properties": { "type": {"const":"origins:keybind"} },
-							"required": ["type"]
+							"properties": { "type": {"const":"origins:keybind"} }, "required": ["type"]
 						},
 						"then": {
 							"properties": {
@@ -132,8 +130,7 @@
 						}
 					}, {
 						"if": {
-							"properties": { "type": {"const":"origins:tooltip"} },
-							"required": ["type"]
+							"properties": { "type": {"const":"origins:tooltip"} }, "required": ["type"]
 						},
 						"then": {
 							"properties": {
@@ -243,8 +240,7 @@
 		},
 		{
 			"if": {
-				"properties": { "type": {"const":"origins:climbing"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"origins:climbing"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {
@@ -262,8 +258,7 @@
 		},
 		{
 			"if": {
-				"properties": { "type": {"const":"origins:conditioned_attribute"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"origins:conditioned_attribute"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {
@@ -287,10 +282,7 @@
 						"default": true
 					}
 				},
-				"oneOf": [
-					{"required": ["modifier"]},
-					{"required": ["modifiers"]}
-				]
+				"oneOf": [ {"required": ["modifier"]}, {"required": ["modifiers"]} ]
 			}
 		},
 		{
@@ -322,12 +314,7 @@
 						"default": 80
 					}
 				},
-				"anyOf": [
-					{"required": ["head"]},
-					{"required": ["chest"]},
-					{"required": ["legs"]},
-					{"required": ["feet"]}
-				]
+				"anyOf": [ {"required": ["head"]}, {"required": ["chest"]}, {"required": ["legs"]}, {"required": ["feet"]} ]
 			}
 		},
 		{
@@ -422,10 +409,7 @@
 						"default":false
 					}
 				},
-				"oneOf": [
-					{"required": ["effect"]},
-					{"required": ["effects"]}
-				]
+				"oneOf": [ {"required": ["effect"]}, {"required": ["effects"]} ]
 			}
 		},
 		{
@@ -651,8 +635,7 @@
 		},
 		{
 			"if": {
-				"properties": { "type": {"const":"origins:invulnerability"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"origins:invulnerability"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {
@@ -710,8 +693,7 @@
 		},
 		{
 			"if": {
-				"properties": { "type": {"const":"origins:keep_inventory"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"origins:keep_inventory"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {
@@ -723,7 +705,7 @@
 						"type": "array",
 						"description": "If specified, only make the items that are in the listed inventory slots persist in the entity's inventory.\nSee https://origins.readthedocs.io/en/latest/misc/positioned_item_stack_slots/ for possible values.",
 						"items": {
-							"$comment": "Because certian mods add inventory slots I've not specified a maximum",
+							"$comment": "Because certain mods add inventory slots I've not specified a maximum",
 							"type": "integer",
 							"minimum": 0
 						}
@@ -832,7 +814,7 @@
 				"$comment": "https://origins.readthedocs.io/en/latest/types/power_types/multiple/"
 			},
 			"then": {
-				"$comment": "We check for vallid properties with `^[a-z0-9/._-]+$`.\nBecause we don't want to match properties already defined we add them to a negative lookahead `(?!)` directly after the start of the string.\nWe also put them in their own group so we can independantly check for the end of the string to allow things like 'conditional' to match while 'condition' won't. `(?!(?:)$)`\nThis will block meta properties. See https://github.com/apace100/apoli/issues/73",
+				"$comment": "We check for valid properties with `^[a-z0-9/._-]+$`.\nBecause we don't want to match properties already defined we add them to a negative lookahead `(?!)` directly after the start of the string.\nWe also put them in their own group so we can independently check for the end of the string to allow things like 'conditional' to match while 'condition' won't. `(?!(?:)$)`\nThis will block meta properties. See https://github.com/apace100/apoli/issues/73",
 				"patternProperties": {
 					"^(?:type|name|description|hidden|condition|loading_priority|badges)$": true,
 					"^(?!(?:type|name|description|hidden|condition|loading_priority|badges)$)[a-z0-9/._-]+$": {"$ref": "#"}
@@ -1129,8 +1111,7 @@
 		},
 		{
 			"if": {
-				"properties": { "type": {"const":"origins:shader"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"origins:shader"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {
@@ -2640,7 +2621,7 @@
 			"then": {
 				"properties": {
 					"feature": {
-						"description": "If specified, this feature renderer will not be rendered.",
+						"description": "If specified, this feature renderer will not be rendered.\nSee: https://origins.readthedocs.io/en/latest/misc/extras/feature_renderers/",
 						"enum": [
 							"armor", "cape", "cat_collar", "deadmau5", "dolphin_held_item", "drowned_overlay", "elytra", "enderman_block",
 							"energy_swirl_overlay", "eyes", "fox_held_item", "head", "held_item", "horse_armor", "horse_marking",
@@ -2651,7 +2632,7 @@
 						]
 					},
 					"features": {
-						"description": "If specified, these feature renderers will not be rendered.",
+						"description": "If specified, these feature renderers will not be rendered.\nSee: https://origins.readthedocs.io/en/latest/misc/extras/feature_renderers/",
 						"type": "array",
 						"items": { "enum": [
 							"armor", "cape", "cat_collar", "deadmau5", "dolphin_held_item", "drowned_overlay", "elytra", "enderman_block",

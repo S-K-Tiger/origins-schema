@@ -26,8 +26,7 @@
 		{
 			"$comment": "#region meta",
 			"if": {
-				"properties": { "type": {"const":"origins:and"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"origins:and"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {
@@ -43,8 +42,7 @@
 		},
 		{
 			"if": {
-				"properties": { "type": {"const":"origins:constant"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"origins:constant"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {
@@ -58,8 +56,7 @@
 		},
 		{
 			"if": {
-				"properties": { "type": {"const":"origins:or"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"origins:or"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {

@@ -34,8 +34,7 @@
 	"allOf": [
 		{
 			"if": {
-				"properties": { "type": {"const":"minecraft:crafting_shapeless"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"minecraft:crafting_shapeless"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {
@@ -60,8 +59,7 @@
 		},
 		{
 			"if": {
-				"properties": { "type": {"const":"minecraft:crafting_shaped"} },
-				"required": ["type"]
+				"properties": { "type": {"const":"minecraft:crafting_shaped"} }, "required": ["type"]
 			},
 			"then": {
 				"properties": {

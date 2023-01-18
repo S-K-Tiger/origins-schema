@@ -1,0 +1,23 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_type_vector",
+	"description": "An Object that specifies the X, Y and Z coordinates of a certain point in space.\nSee https://origins.readthedocs.io/en/latest/types/data_types/vector/",
+	"type":"object",
+	"properties": {
+		"x": {
+			"type":"number",
+			"description": "The X coordinate of the point.",
+			"default": 0.0
+		},
+		"y": {
+			"type":"number",
+			"description": "The Y coordinate of the point.",
+			"default": 0.0
+		},
+		"z": {
+			"type":"number",
+			"description": "The Z coordinate of the point.",
+			"default": 0.0
+		}
+	}
+}

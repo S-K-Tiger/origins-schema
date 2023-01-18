@@ -1,0 +1,11 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_type_item_slot",
+	"description": "A string that represents a slot from an entity or container's inventory.",
+	"type": "string",
+	"pattern": "^armor\\.(?:chest|feet|head|legs)|container\\.[1-5]?[0-9]|enderchest\\.[1-2]?[0-9]|horse\\.(?:1?[0-9]|armor|saddle)|hotbar\\.[0-8]|inventory\\.[1-2]?[0-9]|villager\\.[0-7]|weapon(?:\\.mainhand|\\.offhand)?$",
+	"examples": [
+		"armor.chest", "armor.feet", "armor.head", "armor.legs", "container.53", "enderchest.26", "horse.14", "horse.armor",
+		"horse.saddle", "hotbar.8", "inventory.26", "villager.7", "weapon.mainhand", "weapon.offhand", "weapon"
+	]
+}

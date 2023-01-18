@@ -1,0 +1,271 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_item_action",
+	"description": "Item Actions operate on a stack of items.\nSee: https://origins.readthedocs.io/en/latest/types/item_action_types/",
+	"type": "object",
+	"properties": {
+		"type": {
+			"type": "string",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"examples": [
+				"origins:and", "origins:chance", "origins:choice", "origins:delay",
+				"origins:if_else_list", "origins:if_else", "origins:nothing", "origins:side",
+				"origins:consume", "origins:damage", "origins:merge_nbt", "origins:modify", "origins:remove_enchantment"
+			]
+		}
+	},
+	"required": ["type"],
+	"allOf": [
+		{
+			"$comment": "#region meta",
+			"if": {
+				"properties": { "type": {"const":"origins:and"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"actions": {
+						"type": "array",
+						"description": "These actions will be executed one after the other (but in the same tick).\nSee https://origins.readthedocs.io/en/latest/types/meta_action_types/and/",
+						"items": {"$ref": "#"},
+						"minItems": 1
+					}
+				},
+				"required": ["actions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:chance"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/meta_action_types/chance/"
+			},
+			"then": {
+				"properties": {
+					"action": {
+						"$ref": "#",
+						"description": "The action which might be executed."
+					},
+					"chance": {
+						"type": "number",
+						"description": "The chance that the action will execute, from 0 to 1. (E.g. 0.1 means 10% chance, 0.95 means 95% chance).",
+						"exclusiveMinimum": 0, "exclusiveMaximum": 1
+					},
+					"fail_action": {
+						"$ref": "#",
+						"description": "The action to execute if the specified action in the action field is not executed."
+					}
+				},
+				"required": ["action", "chance"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:choice"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/meta_action_types/choice/"
+			},
+			"then": {
+				"properties": {
+					"actions": {
+						"type": "array",
+						"description": "Executes one of the provided actions, choosing randomly based on the assigned weights. The actions with higher weight values are more likely to be chosen.\nweight / sumOfAllWeights = chance",
+						"items": {
+							"type": "object",
+							"properties": {
+								"element": {"$ref": "#"},
+								"weight": {"type": "integer", "exclusiveMinimum": 0}
+							},
+							"required": ["element", "weight"]
+						},
+						"minItems": 2
+					}
+				},
+				"required": ["actions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:delay"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/meta_action_types/delay/"
+			},
+			"then": {
+				"properties": {
+					"action": {
+						"$ref": "#",
+						"description": "The action which will be executed after the delay."
+					},
+					"ticks": {
+						"type":"integer",
+						"description": "The amount of ticks until the action is executed.\nDelaying an action for more than a few ticks is not recommended! This meta action type is not reliable for such task.\nSee https://origins.readthedocs.io/en/latest/types/meta_action_types/delay/",
+						"exclusiveMinimum": 0
+					}
+				},
+				"required": ["action", "ticks"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:if_else_list"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"actions": {
+						"type": "array",
+						"description": "Checks a list of actions associated with conditions, and executes the first one in the list for which the condition holds. Basically a less indentation-heavy way to represent a deeply nested If-Else (Meta Action Type).\nSee https://origins.readthedocs.io/en/latest/types/meta_action_types/if_else_list/",
+						"items": {
+							"type": "object",
+							"properties": {
+								"action": {"$ref": "#"},
+								"condition": {"$ref": "../conditions/item.json"}
+							},
+							"required": ["action", "condition"]
+						},
+						"minItems": 2
+					}
+				},
+				"required": ["actions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:if_else"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/meta_action_types/if_else/"
+			},
+			"then": {
+				"properties": {
+					"condition": {
+						"$ref": "../conditions/item.json",
+						"description": "A condition based on the type of action."
+					},
+					"if_action": {
+						"$ref": "#",
+						"description": "The action which is executed when the condition evaluates to true."
+					},
+					"else_action": {
+						"$ref": "#",
+						"description": "If present, this action will be executed when the condition evaluates to false."
+					}
+				},
+				"required": ["condition", "if_action"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:side"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/meta_action_types/side/"
+			},
+			"then": {
+				"properties": {
+					"action": {
+						"$ref": "#",
+						"description": "The action to execute."
+					},
+					"side": {
+						"description": "Determines where to execute the specified action type. Accepts \"client\" or \"server\"",
+						"enum": ["client", "server"]
+					}
+				},
+				"required": ["action", "side"]
+			},
+			"$comment": "#endregion meta"
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:consume"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/item_action_types/consume/"
+			},
+			"then": {
+				"properties": {
+					"amount": {
+						"type": "integer",
+						"description": "The amount of items to remove.",
+						"default": 1, "minimum": 1
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:damage"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"amount": {
+						"type": "integer",
+						"description": "The amount of damage it should do to the item stack.",
+						"default": 1
+					},
+					"ignore_unbreaking": {
+						"type": "boolean",
+						"description": "Determines if this action should ignore the Unbreaking enchantment.",
+						"default": false
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:merge_nbt"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/item_action_types/merge_nbt/"
+			},
+			"then": {
+				"properties": {
+					"nbt": {
+						"type": "string",
+						"description": "The NBT to merge to the item's NBT."
+					}
+				},
+				"required": ["nbt"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:modify"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/item_action_types/modify/"
+			},
+			"then": {
+				"properties": {
+					"modifier": {
+						"type": "string",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"description": "The ID of an item modifier."
+					}
+				},
+				"required": ["modifier"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:remove_enchantment"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/item_action_types/remove_enchantment/"
+			},
+			"then": {
+				"properties": {
+					"enchantment": {
+						"type": "string",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"description": "If specified, this enchantment will be removed from the item."
+					},
+					"enchantments": {
+						"description": "If specified, these enchantments will be removed from the item.",
+						"type": "array",
+						"items": {
+							"type": "string",
+							"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						}
+					},
+					"levels": {
+						"type": "integer",
+						"description": "If specified, only the enchantments that has the specified level will be removed from the item."
+					},
+					"reset_repair_cost": {
+						"description": "Determines whether the 'repair cost' of the item should be reset.",
+						"type": "boolean",
+						"default": false
+					}
+				}
+			}
+		}
+	]
+}

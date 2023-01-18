@@ -1,0 +1,245 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_bientity_condition",
+	"description": "Bi-entity Condition Types operate on a Pair<Entity, Entity>, or in simpler terms: an actor and a target. The actor and target is determined depending on the used power type, and can be swapped. These are available to power/condition types that provides a bientity_condition object field.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/",
+	"type": "object",
+	"properties": {
+		"type": {
+			"type": "string",
+			"description": "ID and namespace of the bientity condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"examples": [
+				"origins:and", "origins:constant", "origins:or",
+				"origins:actor_condition", "origins:both", "origins:either", "origins:invert", "origins:target_condition", "origins:undirected",
+				"origins:attack_target", "origins:attacker", "origins:can_see", "origins:distance", "origins:owner",
+				"origins:relative_rotation", "origins:riding_recursive", "origins:riding_root", "origins:riding"
+			]
+		},
+		"inverted": {
+			"type": "boolean",
+			"description": "If true, the condition acts inverted.",
+			"default": false
+		}
+	},
+	"required": ["type"],
+	"allOf": [
+		{
+			"$comment": "#region meta",
+			"if": {
+				"properties": { "type": {"const":"origins:and"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"conditions": {
+						"type": "array",
+						"description": "All of these conditions have to be fulfilled in order for this condition to be fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/and/",
+						"items": {"$ref": "#"},
+						"minItems": 2
+					}
+				},
+				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:constant"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"value": {
+						"type": "boolean",
+						"description": "If true, the condition is always fulfilled. If false, the condition is never fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/constant/"
+					}
+				},
+				"required": ["value"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:or"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"conditions": {
+						"type": "array",
+						"description": "Any of these condition types have to be fulfilled in order for this condition to be fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/or/",
+						"items": {"$ref": "#"},
+						"minItems": 2
+					}
+				},
+				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:actor_condition"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"condition": {
+						"$ref": "../conditions/entity.json",
+						"description": "The entity condition type to check for on the acting entity.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/actor_condition/"
+					}
+				},
+				"required": ["condition"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:both"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"condition": {
+						"$ref": "../conditions/entity.json",
+						"description": "The entity condition type to check on both the actor and target entity.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/both/"
+					}
+				},
+				"required": ["condition"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:either"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"condition": {
+						"$ref": "../conditions/entity.json",
+						"description": "The entity condition type to check on either actor or target entities.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/either/"
+					}
+				},
+				"required": ["condition"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:invert"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"condition": {
+						"$ref": "#",
+						"description": "The bi-entity condition type to check which will have its 'target' and 'actor' contexts swapped.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/invert/"
+					}
+				},
+				"required": ["condition"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:target_condition"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"condition": {
+						"$ref": "../conditions/entity.json",
+						"description": "The entity condition type to check for on the target entity.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/target_condition/"
+					}
+				},
+				"required": ["condition"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:undirected"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"condition": {
+						"$ref": "#",
+						"description": "The bi-entity condition type to check for.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/undirected/"
+					}
+				},
+				"required": ["condition"]
+			},
+			"$comment": "#endregion meta"
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:can_see"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/bientity_condition_types/can_see/"
+			},
+			"then": {
+				"properties": {
+					"shape_type": {
+						"description": "Determines how the ray-cast will handle blocks.\nSee https://origins.readthedocs.io/en/latest/misc/extras/shape_types/",
+						"enum": ["collider", "outline", "visual"],
+						"default": "visual"
+					},
+					"fluid_handling": {
+						"description": "Determines how the ray-cast will handle fluids.\nSee https://origins.readthedocs.io/en/latest/misc/extras/fluid_handling/",
+						"enum": ["any", "none", "source_only"],
+						"default": "none"
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:distance"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/bientity_condition_types/distance/"
+			},
+			"then": {
+				"properties": {
+					"comparison": {
+						"description": "How to compare the distance against the specified value.",
+						"enum": [ "<", "<=", ">", ">=", "==", "!=" ]
+					},
+					"compare_to": {
+						"description": "The distance (in blocks) to compare the distance between the actor and target to.",
+						"type": "number"
+					}
+				},
+				"required": ["comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:relative_rotation"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/bientity_condition_types/relative_rotation/"
+			},
+			"then": {
+				"properties": {
+					"axes": {
+						"type":"array",
+						"items": {
+							"description": "The axes to get the angle values to calculate, and compare to.",
+							"enum": ["x", "y", "z"]
+						},
+						"uniqueItems": true,
+						"default": ["x", "y", "z"]
+					},
+					"actor_rotation": {
+						"description": "Determines the initial point of the rotation for the actor. Accepts \"head\" or \"body\".",
+						"enum": ["head", "body"],
+						"default": "head"
+					},
+					"target_rotation": {
+						"description": "Determines the initial point of the rotation for the target. Accepts \"head\" or \"body\".",
+						"enum": ["head", "body"],
+						"default": "body"
+					},
+					"comparison": {
+						"description": "Determines how the calculated angle value will be compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "number",
+						"description": "The value to compare the calculated angle value to."
+					}
+				},
+				"required": ["comparison", "compare_to"]
+			}
+		}
+	]
+}

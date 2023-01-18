@@ -1,0 +1,27 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_types_attributed_modifier",
+	"description": "An Object used to specify how a specific attribute should be modified.\nBasically an Attribute Modifier with an additional attribute field.",
+	"type": "object",
+	"properties": {
+		"attribute": {
+			"type": "string",
+			"description": "ID of the attribute which will be modified by this modifier.",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"examples": ["minecraft:generic.attack_speed"]
+		},
+		"operation": {
+			"description": "The operation which will be performed by this modifier.",
+			"enum": ["addition", "multiply_base", "multiply_total"]
+		},
+		"value": {
+			"type": "number",
+			"description": "The value to use for the modifier operation."
+		},
+		"name": {
+			"type": "string",
+			"description": "A descriptive name for the modifier, describing where it comes from."
+		}
+	},
+	"required": ["attribute", "operation", "value"]
+}

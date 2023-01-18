@@ -1,0 +1,33 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_type_modifier",
+	"description": "An Object used to specify how a value should be modified.",
+	"type": "object",
+	"properties": {
+		"operation": {
+			"description": "The operation which will be performed by this modifier.",
+			"enum": [
+				"add_base_early",
+				"multiply_base_additive", "multiply_base_multiplicative",
+				"add_base_late",
+				"min_base", "max_base", "set_base",
+				"multiply_total_additive", "multiply_total_multiplicative",
+				"min_total", "max_total", "set_total"
+			]
+		},
+		"value": {
+			"type": "number",
+			"description": "The value to use for the modifier operation."
+		},
+		"resource": {
+			"type": "string",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"description": "If specified, the value of this power will be used instead of the value specified in the value field."
+		},
+		"name": {
+			"type": "string",
+			"description": "A descriptive name for the modifier, describing where it comes from."
+		}
+	},
+	"required": ["operation", "value"]
+}

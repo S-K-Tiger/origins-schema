@@ -1,0 +1,43 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_type_hud_render",
+	"type": "object",
+	"description": "An Object used to define how a resource or cooldown bar should be rendered.",
+	"properties": {
+		"should_render": {
+			"type": "boolean",
+			"description": "Whether the bar should be visible or not.",
+			"default": true
+		},
+		"sprite_location": {
+			"type": "string",
+			"description": "The path to the file in the assets which contains what the bar looks like. See https://origins.readthedocs.io/en/latest/misc/extras/sprites/ for a list of files included by default in the mod.",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"default": "origins:textures/gui/resource_bar.png",
+			"examples": [
+				"origins:textures/gui/resource_bar.png",
+				"origins:textures/gui/community/spiderkolo/resource_bar_01.png",
+				"origins:textures/gui/community/spiderkolo/resource_bar_02.png",
+				"origins:textures/gui/community/spiderkolo/resource_bar_03.png",
+				"origins:textures/gui/community/spiderkolo/resource_bar_points_01.png",
+				"origins:textures/gui/community/huang/resource_bar_01.png",
+				"origins:textures/gui/community/huang/resource_bar_02.png"
+			]
+		},
+		"bar_index": {
+			"type": "integer",
+			"description": "The indexed position of the bar on the sprite to use. Please note that indexes start at 0.",
+			"default": 0,
+			"minimum": 0
+		},
+		"condition": {
+			"$ref": "../conditions/entity.json",
+			"description": "If set (and should_render is true), the bar will only display when the entity with the power fulfills this condition."
+		},
+		"inverted": {
+			"type":"boolean",
+			"description": "If set to true, inverts the way the hud render process (it'll look like its value is being decreased).",
+			"default":false
+		}
+	}
+}

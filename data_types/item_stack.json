@@ -1,0 +1,26 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_type_item_stack",
+	"description": "An Object which defines a new item stack.\nSee: https://origins.readthedocs.io/en/latest/types/data_types/item_stack/",
+	"type": "object",
+	"properties": {
+		"item": {
+			"type": "string",
+			"description": "ID of a registered item.",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+		},
+		"amount": {
+			"type": "integer",
+			"description": "Size of the stack.",
+			"default": 1,
+			"minimum": 1
+		},
+		"tag": {
+			"$comment": "Is there a better pattern for NBT data?",
+			"type": "string",
+			"description": "NBT data of the item.",
+			"pattern": "\\{.*\\:.*\\}"
+		}
+	},
+	"required": ["item"]
+}

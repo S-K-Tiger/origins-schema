@@ -1,0 +1,133 @@
+{
+	"$id": "https://cdn.jsdelivr.net/gh/S-K-Tiger/PackdevUtils@main/Schema/origins/layer.json",
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "Origins layer JSON schema by S_K_Tiger",
+	"description": "See: https://origins.readthedocs.io/en/latest/json/origin_layer/ if you have any questions.\nFound any mistakes? Open a issue at https://github.com/S-K-Tiger/PackdevUtils/issues",
+	"type": "object",
+	"properties": {
+		"order": {
+			"type": "integer",
+			"description": "Specifies the order of this layer in the choose and view origin screen among the other layers. Smaller numbers mean it appears before layers with larger numbers."
+		},
+		"origins": {
+			"type": "array",
+			"description": "Defines the origins that should be in this layer. Identifier strings and Conditioned Origin objects can be mixed in the same array.",
+			"items": {
+				"type": ["string", "object"],
+				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+				"properties": {
+					"condition": {"$ref": "./conditions/entity.json"},
+					"origins": {
+						"type": "array",
+						"description": "Then namespace and IDs of the origins which should become available when the condition is fulfilled.",
+						"items": {
+							"type": "string",
+							"description": "Identifier string",
+							"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						}
+					}
+				},
+				"required": ["condition", "origins"]
+			},
+			"minItems":1,
+			"uniqueItems": true
+		},
+		"enabled": {
+			"type": "boolean",
+			"description": "If set to false, this layer will be unavailable.",
+			"default": true
+		},
+		"replace": {
+			"type": "boolean",
+			"description": "If set to false, the data in this file will be appended to an already existing version of this layer. Useful to add custom origins to the default origin layer for example. If set to true, the layer will be replaced and only the origins specified in this file will appear.",
+			"default": false
+		},
+		"name": {
+			"type": "string",
+			"description": "The display name of the layer. Will show at the top of the GUI saying \"Choose your [name here]\". Can be a literal string or a translation key."
+		},
+		"gui_title": {
+			"type":"object",
+			"description": "If specified, the choose/view origin title for the layer (the text that shows at the top of the GUI) will be overridden by this.",
+			"properties": {
+				"choose_origin": {
+					"type":"string",
+					"description": "If specified, this will override the title that shows up when choosing an origin in the layer."
+				},
+				"view_origin": {
+					"type":"string",
+					"description": "If specified, this will override the title that shows up when viewing an origin in the layer."
+				}
+			}
+		},
+		"missing_name": {
+			"type": "string",
+			"description": "The display name of the origin that will show when viewing the origin if no origin has been assigned to this layer. Can be a literal string or a translation key."
+		},
+		"missing_description": {
+			"type": "string",
+			"description": "The description of the origin that will show when viewing the origin if no origin has been assigned to this layer. Can be a literal string or a translation key."
+		},
+		"allow_random": {
+			"type": "boolean",
+			"description": "If set to true, this layer will show an option for choosing a random origin.",
+			"default": false
+		},
+		"allow_random_unchoosable": {
+			"type": "boolean",
+			"description": "Whether origins which are unchoosable (`unchoosable` field set to true in the origin file) should be included in the random option. Can for example be used to force players to choose a random origin, by setting this to true and making all origins in the layer unchoosable.",
+			"default": false
+		},
+		"exclude_random": {
+			"type": "array",
+			"description": "If specified, the origins included in this list will not be picked by the random choice.",
+			"items": {
+				"type": "string",
+				"description": "Identifier string",
+				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+			},
+			"uniqueItems": true
+		},
+		"default_origin": {
+			"type": "string",
+			"description": "If set, the origin with this namespace and ID will automatically be chosen for a new player. If an orb of origin is used later on, the player will be able to choose another origin then and the default_origin will not apply. Could for example be used to make all players start as human, and then use the orb as a progression item to select an origin.",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+		},
+		"auto_choose": {
+			"type": "boolean",
+			"description": "If set to true, this layer will automatically pick an origin for the player if only one option is available. This also applies when an orb of origin is used.",
+			"default": false
+		},
+		"hidden": {
+			"type":"boolean",
+			"description": "If set to true, this layer will be hidden from the \"View Origin\" screen.",
+			"default":false
+		},
+		"loading_priority": {
+			"type":"integer",
+			"description": "Specifies when this layer is loaded. Higher numbers mean it's loaded later, which means it will override those with lower loading priorities which share the same ID.",
+			"default": 0
+		}
+	},
+	"required": ["origins"],
+	"examples": [
+		{
+			"order": 1,
+			"origins": [
+				"origins:arachnid",
+				"origins:avian",
+				"origins:blazeborn",
+				"origins:elytrian",
+				"origins:enderian",
+				"origins:feline",
+				"origins:human",
+				"origins:merling",
+				"origins:phantom",
+				"origins:shulk"
+			],
+			"name": "Second Origin",
+			"missing_name": "None",
+			"missing_description": "You currently don't have a secondary origin selected."
+		}
+	]
+}

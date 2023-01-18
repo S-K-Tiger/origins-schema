@@ -1,0 +1,159 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_damage_condition",
+	"description": "Damage Condition Types operate on a combination of DamageSource and Float, allowing to check not only the type of damage dealt, but also how much damage was dealt. These are available to power/condition types that provides a damage_condition object field.\nSee https://origins.readthedocs.io/en/latest/types/damage_condition_types/",
+	"type": "object",
+	"properties": {
+		"type": {
+			"type": "string",
+			"description": "ID and namespace of the damage condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/damage_condition_types/",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"examples": [
+				"origins:and", "origins:constant", "origins:or",
+				"origins:amount", "origins:attacker", "origins:bypasses_armor", "origins:explosive", "origins:fire", "origins:from_falling",
+				"origins:name", "origins:out_of_world", "origins:projectile", "origins:unblockable"
+			]
+		},
+		"inverted": {
+			"type": "boolean",
+			"default": false,
+			"description": "If true, the condition acts inverted."
+		}
+	},
+	"required": ["type"],
+	"allOf": [
+		{
+			"$comment": "#region meta",
+			"if": {
+				"properties": { "type": {"const":"origins:and"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"conditions": {
+						"type": "array",
+						"description": "All of these conditions have to be fulfilled in order for this condition to be fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/and/",
+						"items": {"$ref": "#"},
+						"minItems": 2
+					}
+				},
+				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:constant"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"value": {
+						"type": "boolean",
+						"description": "If true, the condition is always fulfilled. If false, the condition is never fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/constant/"
+					}
+				},
+				"required": ["value"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:or"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"conditions": {
+						"type": "array",
+						"description": "Any of these condition types have to be fulfilled in order for this condition to be fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/or/",
+						"items": {"$ref": "#"},
+						"minItems": 2
+					}
+				},
+				"required": ["conditions"]
+			},
+			"$comment": "#endregion meta"
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:amount"} },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/damage_condition_types/amount/"
+			},
+			"then": {
+				"properties": {
+					"comparison": {
+						"description": "How the amount of damage should be compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "number",
+						"description": "The value to compare the amount of damage to."
+					}
+				},
+				"required": ["comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:attacker"} },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/damage_condition_types/attacker/"
+			},
+			"then": {
+				"properties": {
+					"entity_condition": {
+						"$ref": "../conditions/entity.json",
+						"description": "If set, the attacker entity must fulfill the provided entity condition type in order for this condition to evaluate to true."
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:name"} },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/damage_condition_types/name/"
+			},
+			"then": {
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Name the damage source should have to pass the check.\nSee https://origins.readthedocs.io/en/latest/misc/extras/damage_source_names/ for possible values.",
+						"examples": [
+							"anvil.player", "anvil", "arrow.item", "arrow", "badRespawnPoint", "cactus.player", "cactus", "cramming.player",
+							"cramming", "dragonBreath.player", "dragonBreath", "drown.player", "drown", "dryout.player", "dryout",
+							"even_more_magic", "explosion.player", "explosion", "fall.player", "fall", "fallingBlock.player", "fallingBlock",
+							"fallingStalactite.player", "fallingStalactite", "fireball.item", "fireball", "fireworks.item", "fireworks.player",
+							"fireworks", "flyIntoWall.player", "flyIntoWall", "freeze.player", "freeze", "generic.player", "generic",
+							"hotFloor.player", "hotFloor", "indirectMagic.item", "indirectMagic", "inFire.player", "inFire", "inWall.player",
+							"inWall", "lava.player", "lava", "lightningBolt.player", "lightningBolt", "magic.player", "magic", "mob.item",
+							"mob", "onFire.player", "onFire", "outOfWorld.player", "outOfWorld", "player.item", "player", "stalagmite.player",
+							"stalagmite", "starve.player", "starve", "sting.item", "sting.player", "sting", "sweetBerryBush.player",
+							"sweetBerryBush", "thorns.item", "thorns", "thrown.item", "trident.item", "trident", "wither.player", "wither",
+							"witherSkull", "genericDamageOverTime.player", "genericDamageOverTime",
+							"hurt_by_water.player", "hurt_by_water", "no_water_for_gills.player", "no_water_for_gills"
+						]
+					}
+				},
+				"required": ["name"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:projectile"} },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/damage_condition_types/projectile/"
+			},
+			"then": {
+				"properties": {
+					"projectile": {
+						"type": "string",
+						"description": "If set, the check will only pass if the projectile was of an entity type with the specified namespace and ID.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"examples": ["minecraft:spectral_arrow"]
+					}
+				}
+			}
+		}
+	]
+}

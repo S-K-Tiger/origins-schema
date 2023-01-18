@@ -1,0 +1,442 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_block_condition",
+	"description": "Block Condition Types operate on CachedBlockPosition, essentially a combination of World and BlockPos, which allows retrieving all necessary information about the block. These are available to power/condition types that provides a block_condition object field.\nSee https://origins.readthedocs.io/en/latest/types/block_condition_types/",
+	"type": "object",
+	"properties": {
+		"type": {
+			"type": "string",
+			"description": "ID and namespace of the block condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/block_condition_types/",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"examples": [
+				"origins:and", "origins:constant", "origins:or", "origins:offset",
+				"origins:adjacent", "origins:attachable", "origins:blast_resistance", "origins:block_state", "origins:block",
+				"origins:distance_from_coordinates", "origins:exposed_to_sky", "origins:fluid", "origins:hardness", "origins:height",
+				"origins:in_tag", "origins:light_blocking", "origins:light_level", "origins:material", "origins:movement_blocking",
+				"origins:nbt", "origins:replacable", "origins:slipperiness", "origins:water_loggable"
+			]
+		},
+		"inverted": {
+			"type": "boolean",
+			"description": "If true, the condition acts inverted.",
+			"default": false
+		}
+	},
+	"required": ["type"],
+	"allOf": [
+		{
+			"$comment": "#region meta",
+			"if": {
+				"properties": { "type": {"const":"origins:and"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"conditions": {
+						"type": "array",
+						"description": "All of these conditions have to be fulfilled in order for this condition to be fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/and/",
+						"items": {"$ref": "#"},
+						"minItems": 2
+					}
+				},
+				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:constant"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"value": {
+						"type": "boolean",
+						"description": "If true, the condition is always fulfilled. If false, the condition is never fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/constant/"
+					}
+				},
+				"required": ["value"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:or"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"conditions": {
+						"type": "array",
+						"description": "Any of these condition types have to be fulfilled in order for this condition to be fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/or/",
+						"items": {"$ref": "#"},
+						"minItems": 2
+					}
+				},
+				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:offset"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/offset/"
+			},
+			"then": {
+				"properties": {
+					"condition": {
+						"$ref": "#",
+						"description": "The condition to check with the given offset."
+					},
+					"x": {
+						"type": "integer",
+						"description": "How much to offset the position on the x-axis.",
+						"default": 0
+					},
+					"y": {
+						"type": "integer",
+						"description": "How much to offset the position on the y-axis.",
+						"default": 0
+					},
+					"z": {
+						"type": "integer",
+						"description": "How much to offset the position on the z-axis.",
+						"default": 0
+					}
+				},
+				"required": ["condition"]
+			},
+			"$comment": "#endregion meta"
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:adjacent"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/adjacent/"
+			},
+			"then": {
+				"properties": {
+					"adjacent_condition": {
+						"$ref": "#",
+						"description": "The block condition that needs to be fulfilled by adjacent blocks to count towards this condition."
+					},
+					"comparison": {
+						"description": "How the number of adjacent blocks which fulfill `adjacent_condition` should be compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "number",
+						"description": "The value to compare the number to."
+					}
+				},
+				"required": ["adjacent_condition", "comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:blast_resistance"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/blast_resistance/"
+			},
+			"then": {
+				"properties": {
+					"comparison": {
+						"description": "Determines how the blast resistance of the block is compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "number",
+						"description": "The value to compare the blast resistance of the block to."
+					}
+				},
+				"required": ["adjacent_condition", "comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:block_state"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/block_state/"
+			},
+			"then": {
+				"properties": {
+					"property": {
+						"type": "string",
+						"description": "The name of the property that should be checked.\nSee https://minecraft.fandom.com/wiki/Block_states#List_of_block_states for possible values.",
+						"examples": ["facing", "waterlogged", "age", "leaves", "stage", "rotation", "open", "axis", "occupied", "part", "honey_level", "attachment", "powered", "tilt", "lit", "has_bottle_0", "drag", "signal_fire", "candles", "level"]
+					},
+					"comparison": {
+						"description": "If specified, determines how the specified property will be compared to a specified value. If not and the property is an integer, it will just check if the block has the specified property.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "integer",
+						"description": "If specified, the value to compare to the value of the specified property."
+					},
+					"value": {
+						"type": "boolean",
+						"description": "If specified, the boolean to compare to the value of the specified property if the specified property is a boolean."
+					},
+					"enum": {
+						"type": "string",
+						"description": "If specified, the string to compare to the specified property if the specified property is a string."
+					}
+				},
+				"required": ["property"],
+				"oneOf": [
+					{"required": ["comparison", "compare_to"]}, {"required": ["value"]}, {"required": ["enum"]},
+					{"not": {"anyOf": [{"required": ["comparison"]}, {"required": ["compare_to"]}, {"required": ["value"]}, {"required": ["enum"]}]}}
+				]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:block"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/block/"
+			},
+			"then": {
+				"properties": {
+					"block": {
+						"type": "string",
+						"description": "The namespace and ID of the block that this block needs to be to pass the check.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"examples": ["minecraft:diamond_block", "minecraft:emerald_block"]
+					}
+				},
+				"required": ["block"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:distance_from_coordinates"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/distance_from_coordinates/"
+			},
+			"then": {
+				"properties": {
+					"reference": {
+						"description": "The point to compare the distance to. Accepts \"world_origin\" or \"world_spawn\".",
+						"enum": ["world_origin", "world_spawn"],
+						"default": "world_origin"
+					},
+					"offset": {
+						"$ref": "#/definitions/origins_data_types/properties/vector",
+						"description": "If specified, determines how much the reference point should be offset."
+					},
+					"ignore_x": {
+						"type":"boolean",
+						"description": "Determines whether to consider the X axis to be 0.",
+						"default": false
+					},
+					"ignore_y": {
+						"type":"boolean",
+						"description": "Determines whether to consider the Y axis to be 0.",
+						"default": false
+					},
+					"ignore_z": {
+						"type":"boolean",
+						"description": "Determines whether to consider the Z axis to be 0.",
+						"default": false
+					},
+					"shape": {
+						"description": "Determines the shape of the check.Determines the shape of the check. Accepts \"cube\", \"star\" or \"sphere\".",
+						"enum": ["cube", "star", "sphere"],
+						"default": "cube"
+					},
+					"scale_reference_to_dimension": {
+						"type":"boolean",
+						"description": "Determines whether to check for the reference point whilst considering the coordinate scale of the dimension.",
+						"default": true
+					},
+					"result_on_the_wrong_dimension": {
+						"type":"boolean",
+						"description": "If specified, this value will override the result of the comparison if the block being tested is not in the reference's dimension."
+					},
+					"round_to_digit": {
+						"type":"integer",
+						"description": "If specified, rounds the result to the closest number with the specified amount of digits after the comma. Negative numbers also work (e.g: -2 rounds to multiples of 100)."
+					},
+					"comparison": {
+						"description": "Determines how the calculated distance is compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "number",
+						"description": "The value to compare the calculated distance to."
+					}
+				},
+				"required": ["comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:fluid"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/fluid/"
+			},
+			"then": {
+				"properties": {
+					"fluid_condition": {
+						"$ref": "../conditions/fluid.json",
+						"description": "The fluid condition type to check the fluid state at the position."
+					}
+				},
+				"required": ["fluid_condition"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:hardness"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/hardness/"
+			},
+			"then": {
+				"properties": {
+					"comparison": {
+						"description": "Determines how the hardness value of the block is compared to the specified value.\nSee https://minecraft.fandom.com/wiki/Breaking#Blocks_by_hardness for a list of hardness for vanilla blocks",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "number",
+						"description": "The value to compare the hardness value of the block to."
+					}
+				},
+				"required": ["comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:height"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/height/"
+			},
+			"then": {
+				"properties": {
+					"comparison": {
+						"description": "How the Y position of the block should be compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "number",
+						"description": "The value to compare the Y position of the block to."
+					}
+				},
+				"required": ["comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:in_tag"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/in_tag/"
+			},
+			"then": {
+				"properties": {
+					"tag": {
+						"type": "string",
+						"description": "The namespace and ID of the tag which the block should be in to pass the check.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"examples": ["minecraft:base_stone_overworld"]
+					}
+				},
+				"required": ["tag"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:light_level"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/light_level/"
+			},
+			"then": {
+				"properties": {
+					"light_type": {
+						"description": "If specified, determines the type of light level to compare. Accepts \"sky\" or \"block\". If no type is provided, the greater value of the two types will be used, which is the \"resulting\" light level of that position.",
+						"enum": ["sky", "block"]
+					},
+					"comparison": {
+						"description": "How the light level should be compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "integer",
+						"description": "The value to compare the light level at the block's position to."
+					}
+				},
+				"required": ["comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:material"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/material/"
+			},
+			"then": {
+				"properties": {
+					"material": {
+						"type":"string",
+						"description": "If specified, checks if the block classifies as this material. See https://origins.readthedocs.io/en/latest/misc/extras/materials/ for possible values.",
+						"examples": [
+							"air", "structure_void", "portal", "carpet", "plant",
+							"underwater_plant", "replaceable_plant", "nether_shoots",
+							"replaceable_underwater_plant", "water", "bubble_column", "lava",
+							"snow_layer", "fire", "decoration", "cobweb", "sculk", "redstone_lamp",
+							"organic_product", "soil", "solid_organic", "dense_ice", "aggregate",
+							"sponge", "shulker_box", "wood", "nether_wood", "bamboo_sapling",
+							"bamboo", "wool", "tnt", "leaves", "glass", "ice", "cactus", "stone",
+							"metal", "snow_block", "repair_station", "barrier", "piston",
+							"moss_block", "gourd", "egg", "cake", "amethyst", "powder_snow"
+						]
+					},
+					"materials": {
+						"type":"array",
+						"description": "If specified, checks if the block classifies as one of these materials. See https://origins.readthedocs.io/en/latest/misc/extras/materials/ for possible values.",
+						"items": {
+							"type":"string",
+							"description": "If specified, checks if the block classifies as this material. See https://origins.readthedocs.io/en/latest/misc/extras/materials/ for possible values.",
+							"examples": [
+								"air", "structure_void", "portal", "carpet", "plant",
+								"underwater_plant", "replaceable_plant", "nether_shoots",
+								"replaceable_underwater_plant", "water", "bubble_column", "lava",
+								"snow_layer", "fire", "decoration", "cobweb", "sculk", "redstone_lamp",
+								"organic_product", "soil", "solid_organic", "dense_ice", "aggregate",
+								"sponge", "shulker_box", "wood", "nether_wood", "bamboo_sapling",
+								"bamboo", "wool", "tnt", "leaves", "glass", "ice", "cactus", "stone",
+								"metal", "snow_block", "repair_station", "barrier", "piston",
+								"moss_block", "gourd", "egg", "cake", "amethyst", "powder_snow"
+							]
+						},
+						"minItems": 2
+					}
+				},
+				"oneOf": [
+					{"required": ["material"]},
+					{"required": ["materials"]}
+				]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:nbt"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/nbt/"
+			},
+			"then": {
+				"properties": {
+					"nbt": {
+						"type":"string",
+						"description": "The NBT data to check for.",
+						"pattern": "\\{.*\\:.*\\}"
+					}
+				},
+				"required": ["nbt"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:slipperiness"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/slipperiness/"
+			},
+			"then": {
+				"properties": {
+					"comparison": {
+						"description": "Determines how the slipperiness value of the block is compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "number",
+						"description": "The value to compare the slipperiness value of the block to."
+					}
+				},
+				"required": ["comparison", "compare_to"]
+			}
+		}
+	]
+}

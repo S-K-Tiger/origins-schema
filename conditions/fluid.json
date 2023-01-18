@@ -1,0 +1,93 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_fluid_condition",
+	"description": "Fluid Condition Types operate on a FluidState, essentially which fluid (if any) exists, as well as properties of the fluid. These are available to power/condition types that provides a fluid_condition object field.\nSee https://origins.readthedocs.io/en/latest/types/fluid_condition_types/",
+	"type": "object",
+	"properties": {
+		"type": {
+			"type": "string",
+			"description": "ID and namespace of the fluid condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/fluid_condition_types/",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"examples": [
+				"origins:and", "origins:constant", "origins:or",
+				"origins:empty", "origins:in_tag", "origins:stil"
+			]
+		},
+		"inverted": {
+			"type": "boolean",
+			"description": "If true, the condition acts inverted.",
+			"default": false
+		}
+	},
+	"required": ["type"],
+	"allOf": [
+		{
+			"$comment": "#region meta",
+			"if": {
+				"properties": { "type": {"const":"origins:and"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"conditions": {
+						"type": "array",
+						"description": "All of these conditions have to be fulfilled in order for this condition to be fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/and/",
+						"items": {"$ref": "#"},
+						"minItems": 2
+					}
+				},
+				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:constant"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"value": {
+						"type": "boolean",
+						"description": "If true, the condition is always fulfilled. If false, the condition is never fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/constant/"
+					}
+				},
+				"required": ["value"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:or"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"conditions": {
+						"type": "array",
+						"description": "Any of these condition types have to be fulfilled in order for this condition to be fulfilled.\nSee https://origins.readthedocs.io/en/latest/types/meta_condition_types/or/",
+						"items": {"$ref": "#"},
+						"minItems": 2
+					}
+				},
+				"required": ["conditions"]
+			},
+			"$comment": "#endregion meta"
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:in_tag"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/fluid_condition_types/in_tag/"
+			},
+			"then": {
+				"properties": {
+					"tag": {
+						"type": "string",
+						"description": "ID of the tag which the fluid should be in to pass the check.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"examples": ["minecraft:water"]
+					}
+				},
+				"required": ["tag"]
+			}
+		}
+	]
+}

@@ -1,0 +1,45 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_type_status_effect_instance",
+	"description": "An Object used to define a status effect with duration, amplifier, etc.",
+	"type": "object",
+	"properties": {
+		"effect": {
+			"type": "string",
+			"description": "ID of the status effect.",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"examples": ["minecraft:slowness", "minecraft:levitation", "minecraft:slow_falling"]
+		},
+		"duration": {
+			"type": "integer",
+			"description": "Duration of the status effect in ticks.",
+			"default": 100,
+			"minimum": 1
+		},
+		"amplifier": {
+			"type": "integer",
+			"description": "Amplifier of the status effect.",
+			"default": 0
+		},
+		"is_ambient": {
+			"type": "boolean",
+			"description": "Whether the effect counts as an ambient effect.",
+			"default": false
+		},
+		"show_particles": {
+			"type": "boolean",
+			"description": "Whether the status effect will spawn particles on the player.",
+			"default": true
+		},
+		"show_icon": {
+			"type": "boolean",
+			"description": "Whether the status effect will show an icon on the HUD.",
+			"default": true
+		}
+	},
+	"required": ["effect"],
+	"examples": [
+		{"effect":"minecraft:slowness","amplifier":1,"duration":80},
+		[{"effect":"minecraft:slow_falling","duration":400,"show_particles":false},{"effect":"minecraft:slowness","duration":400,"show_particles":false}]
+	]
+}

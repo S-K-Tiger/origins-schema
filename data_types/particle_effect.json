@@ -1,0 +1,43 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_type_particle_effect",
+	"description": "Either a String which defines the particle type or an Object which defines the particle type and its additional parameters.",
+	"type": ["object", "string"],
+	"properties": {
+		"type": {
+			"type": "string",
+			"description": "The namespace and ID of the particle type.\nRefer to https://minecraft.fandom.com/wiki/Particles#Particle_IDs for a list of vanilla particle type IDs that you can use.",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"examples": [
+				"minecraft:ambient_entity_effect", "minecraft:angry_villager", "minecraft:ash", "minecraft:block",
+				"minecraft:block_marker", "minecraft:bubble", "minecraft:bubble_pop", "minecraft:bubble_column_up",
+				"minecraft:campfire_cosy_smoke", "minecraft:campfire_signal_smoke", "minecraft:cloud", "minecraft:composter",
+				"minecraft:crimson_spore", "minecraft:crit", "minecraft:current_down", "minecraft:damage_indicator",
+				"minecraft:dolphin", "minecraft:dragon_breath", "minecraft:dripping_dripstone_lava",
+				"minecraft:dripping_dripstone_water", "minecraft:dripping_lava", "minecraft:dripping_obsidian_tear",
+				"minecraft:dripping_water", "minecraft:dust", "minecraft:dust_color_transition", "minecraft:effect",
+				"minecraft:elder_guardian", "minecraft:electric_spark", "minecraft:enchant", "minecraft:enchanted_hit",
+				"minecraft:end_rod", "minecraft:entity_effect", "minecraft:explosion_emitter", "minecraft:explosion",
+				"minecraft:falling_dripstone_lava", "minecraft:falling_dripstone_water", "minecraft:falling_dust",
+				"minecraft:falling_lava", "minecraft:falling_obsidian_tear", "minecraft:falling_spore_blossom",
+				"minecraft:falling_water", "minecraft:firework", "minecraft:fishing", "minecraft:flame", "minecraft:flash",
+				"minecraft:glow", "minecraft:glow_squid_ink", "minecraft:happy_villager", "minecraft:heart",
+				"minecraft:instant_effect", "minecraft:item", "minecraft:item_slime", "minecraft:item_snowball",
+				"minecraft:landing_lava", "minecraft:landing_obsidian_tear", "minecraft:large_smoke", "minecraft:lava",
+				"minecraft:mycelium", "minecraft:nautilus", "minecraft:note", "minecraft:poof", "minecraft:portal",
+				"minecraft:rain", "minecraft:scrape", "minecraft:smoke", "minecraft:sneeze", "minecraft:snowflake",
+				"minecraft:soul", "minecraft:soul_fire_flame", "minecraft:spit", "minecraft:splash",
+				"minecraft:spore_blossom_air", "minecraft:squid_ink", "minecraft:sweep_attack", "minecraft:totem_of_undying",
+				"minecraft:underwater", "minecraft:vibration", "minecraft:warped_spore", "minecraft:wax_off",
+				"minecraft:wax_on", "minecraft:white_ash", "minecraft:witch"
+			]
+		},
+		"params": {
+			"type":"string",
+			"description": "The additional parameter for the particle type."
+		}
+	},
+	"required": ["type", "params"],
+	"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+	"examples": ["minecraft:happy_villager", "minecraft:note", {"type":"minecraft:dust","params":"0.922 0.314 0.314 2"}, {"type":"minecraft:block","params":"minecraft:ice"}]
+}

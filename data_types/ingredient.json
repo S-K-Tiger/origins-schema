@@ -1,0 +1,42 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_ingredient",
+	"description": "Either: an Object specifying a registered item or item tag.\nOr: an Array of Objects specifying a registered item or item tag.",
+	"type": ["object", "array"],
+	"items": {
+		"type": "object",
+		"properties": {
+			"item": {
+				"type": "string",
+				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+				"description": "ID of a registered item."
+			},
+			"tag": {
+				"type": "string",
+				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+				"description": "ID of an item tag.\nWill be ignored if item is set."
+			}
+		},
+		"anyOf": [
+			{"required": ["item"]},
+			{"required": ["tag"]}
+		]
+	},
+	"properties": {
+		"item": {
+			"type": "string",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"description": "ID of a registered item."
+		},
+		"tag": {
+			"type": "string",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"description": "ID of an item tag.\nWill be ignored if item is set."
+		}
+	},
+	"anyOf": [
+		{"required": ["item"]},
+		{"required": ["tag"]},
+		{"minItems": 2}
+	]
+}

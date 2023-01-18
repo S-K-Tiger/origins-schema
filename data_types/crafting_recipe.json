@@ -1,0 +1,103 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_crafting_recipe",
+	"description": "An Object specifying a shapeless or shaped crafting recipe. For some more information, See https://minecraft.gamepedia.com/Recipe",
+	"type": "object",
+	"properties": {
+		"type": {
+			"description": "The type of recipe. Either `minecraft:crafting_shaped` or `minecraft:crafting_shapeless`. Other recipe types are not supported.",
+			"enum": ["minecraft:crafting_shaped", "minecraft:crafting_shapeless"]
+		},
+		"id": {
+			"type": "string",
+			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"description": "An ID for this recipe. Has to be unique among all recipes, otherwise there will be a conflict."
+		},
+		"result": {
+			"type": "object",
+			"description": "The result of the crafting. Note that vanilla does not support NBT tags in the result.",
+			"properties": {
+				"item": {
+					"type": "string",
+					"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+				},
+				"count": {
+					"type": "integer",
+					"minimum": 1
+				}
+			},
+			"required": ["item", "count"]
+		}
+	},
+	"required": ["type", "id", "result"],
+	"additionalProperties": false,
+	"allOf": [
+		{
+			"if": {
+				"properties": { "type": {"const":"minecraft:crafting_shapeless"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"ingredients": {
+						"type": "array",
+						"description": "The items that need to be put in the crafting grid for the recipe.",
+						"items": {"$ref": "../data_types/ingredient.json"},
+						"uniqueItems": false,
+						"minItems": 1,
+						"examples": [
+							[
+								{"item": "minecraft:gunpowder"},
+								[
+									{"item": "minecraft:coal"}, {"item": "minecraft:charcoal"}
+								]
+							]
+						]
+					}
+				},
+				"required": ["ingredients"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"minecraft:crafting_shaped"} },
+				"required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"pattern": {
+						"$comment": "As some mods add crafting tables with larger than 3 by 3 grids I've not added a maxItems restiction",
+						"type": "array",
+						"description": "Specifies the pattern, with each element representing one row. Use a single character to describe one item. A space means that position is empty.",
+						"items": {"type": "string"},
+						"minItems": 1
+					},
+					"key": {
+						"type": "object",
+						"patternProperties": {
+							"^[^\\ ]$": {"$ref": "../data_types/ingredient.json"}
+						},
+						"additionalProperties": false,
+						"minProperties": 1
+					}
+				},
+				"examples": [
+					{
+						"type": "minecraft:crafting_shaped",
+						"id": "origins:sideways_birch_boat",
+						"pattern": [
+							"##",
+							" #",
+							"##"
+						],
+						"key": {
+							"#": {"item": "minecraft:birch_planks"}
+						},
+						"result": {"item": "minecraft:birch_boat"}
+					}
+				],
+				"required": ["pattern", "key"]
+			}
+		}
+	]
+}

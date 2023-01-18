@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "Origins origin JSON schema by S_K_Tiger",
-	"description": "See: https://origins.readthedocs.io/en/latest/json/origin/ if you have any questions.\nFound any mistakes? Open a issue at https://github.com/S-K-Tiger/PackdevUtils/issues",
+	"description": "See: https://origins.readthedocs.io/en/latest/json/origin/ if you have any questions.\nFound any mistakes? Open a issue at https://github.com/S-K-Tiger/origins-schema/issues",
 	"type": "object",
 	"properties": {
 		"powers": {

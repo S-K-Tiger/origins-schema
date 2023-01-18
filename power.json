@@ -2137,7 +2137,7 @@
 						"description": "If specified, only modify how the blocks that fulfills this condition would look like."
 					},
 					"fluid_condition": {
-						"$ref": "#/definitions/conditions/properties/fluid_condition",
+						"$ref": "./conditions/fluid.json",
 						"description": "If specified, only modify how the fluids that fulfills this condition would look like."
 					},
 					"fluid": {

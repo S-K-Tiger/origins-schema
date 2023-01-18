@@ -113,16 +113,8 @@
 		{
 			"order": 1,
 			"origins": [
-				"origins:arachnid",
-				"origins:avian",
-				"origins:blazeborn",
-				"origins:elytrian",
-				"origins:enderian",
-				"origins:feline",
-				"origins:human",
-				"origins:merling",
-				"origins:phantom",
-				"origins:shulk"
+				"origins:arachnid", "origins:avian", "origins:blazeborn", "origins:elytrian", "origins:enderian", "origins:feline",
+				"origins:human", "origins:merling", "origins:phantom", "origins:shulk"
 			],
 			"name": "Second Origin",
 			"missing_name": "None",

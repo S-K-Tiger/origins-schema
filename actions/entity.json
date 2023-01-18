@@ -396,7 +396,7 @@
 					},
 					"item_action": {
 						"description": "If specified, this action will be executed on the affected items before the affected items are dropped.",
-						"$ref": "../action/item.json"
+						"$ref": "../actions/item.json"
 					},
 					"item_condition": {
 						"description": "If specified, only items which fulfill this condition will be dropped.",
@@ -685,7 +685,7 @@
 					},
 					"item_action": {
 						"description": "If specified, this action will be executed on the affected items.",
-						"$ref": "../action/item.json"
+						"$ref": "../actions/item.json"
 					},
 					"item_condition": {
 						"description": "If specified, only items which fulfill this condition will be affected by specified action.",
@@ -905,7 +905,7 @@
 					},
 					"item_action": {
 						"description": "If specified, this action will be executed on the affected items after the affected items are replaced.",
-						"$ref": "../action/item.json"
+						"$ref": "../actions/item.json"
 					},
 					"item_condition": {
 						"description": "If specified, only items which fulfill this condition will be replaced.",

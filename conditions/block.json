@@ -213,7 +213,7 @@
 						"default": "world_origin"
 					},
 					"offset": {
-						"$ref": "#/definitions/origins_data_types/properties/vector",
+						"$ref": "../data_types/vector.json",
 						"description": "If specified, determines how much the reference point should be offset."
 					},
 					"ignore_x": {

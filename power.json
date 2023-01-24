@@ -626,8 +626,12 @@
 			"then": {
 				"properties": {
 					"render_armor": {
-						"type": "boolean",
-						"description": "Whether or not the player's armor should be shown."
+						"description": "Whether or not the player's armor should be shown.",
+						"type": "boolean"
+					},
+					"render_outline": {
+						"description": "Whether glowing outlines are visible.",
+						"type": "boolean"
 					}
 				},
 				"required": ["render_armor"]
@@ -814,8 +818,9 @@
 				"$comment": "https://origins.readthedocs.io/en/latest/types/power_types/multiple/"
 			},
 			"then": {
-				"$comment": "We check for valid properties with `^[a-z0-9/._-]+$`.\nBecause we don't want to match properties already defined we add them to a negative lookahead `(?!)` directly after the start of the string.\nWe also put them in their own group so we can independently check for the end of the string to allow things like 'conditional' to match while 'condition' won't. `(?!(?:)$)`\nThis will block meta properties. See https://github.com/apace100/apoli/issues/73",
+				"$comment": "First check for meta properties and properties already used.\nThen valid properties with `^[a-z0-9/._-]+$`.\nPrior to Apoli 2.7.1/Origins 1.8.1 meta properties cause an error.",
 				"patternProperties": {
+					"^\\$": true,
 					"^(?:type|name|description|hidden|condition|loading_priority|badges)$": true,
 					"^(?!(?:type|name|description|hidden|condition|loading_priority|badges)$)[a-z0-9/._-]+$": {"$ref": "#"}
 				},
@@ -916,7 +921,11 @@
 						"description": "Determines whether the particle should be visible in first person.",
 						"type":"boolean",
 						"default":false
-					}
+					},
+					"visible_while_invisible": {},
+					"count": {},
+					"spread": {},
+					"offset_y": {}
 				},
 				"required": ["particle", "frequency"]
 			}

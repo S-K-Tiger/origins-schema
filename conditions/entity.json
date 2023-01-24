@@ -186,7 +186,6 @@
 						"description": "If specified, only evaluate the condition to true if the biome the entity is in matches one of the specified namespace and IDs.",
 						"items": {
 							"type": "string",
-							"description": "Only evaluate the condition to true if the biome the entity is in matches the specified namespace and ID.",
 							"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 							"examples": [["minecraft:savanna", "minecraft:plains"]]
 						},
@@ -209,17 +208,21 @@
 			},
 			"then": {
 				"properties": {
+					"block_condition": {
+						"$ref": "../conditions/block.json",
+						"description": "TODO"
+					},
 					"offset_x": {
-						"type": "number",
-						"description": "By how much of the bounding box size should the box be offset in the X direction (e.g.: 0 = no offset, 1 = offset of exact width, 2 = offset of twice the width of the bounding box)"
+						"description": "By how much of the bounding box size should the box be offset in the X direction (e.g.: 0 = no offset, 1 = offset of exact width, 2 = offset of twice the width of the bounding box)",
+						"type": "number"
 					},
 					"offset_y": {
-						"type": "number",
-						"description": "By how much of the bounding box size should the box be offset in the Y direction (e.g.: 0 = no offset, 1 = offset of exact width, 2 = offset of twice the width of the bounding box)"
+						"description": "By how much of the bounding box size should the box be offset in the Y direction (e.g.: 0 = no offset, 1 = offset of exact width, 2 = offset of twice the width of the bounding box)",
+						"type": "number"
 					},
 					"offset_z": {
-						"type": "number",
-						"description": "By how much of the bounding box size should the box be offset in the Z direction (e.g.: 0 = no offset, 1 = offset of exact width, 2 = offset of twice the width of the bounding box)"
+						"description": "By how much of the bounding box size should the box be offset in the Z direction (e.g.: 0 = no offset, 1 = offset of exact width, 2 = offset of twice the width of the bounding box)",
+						"type": "number"
 					}
 				},
 				"required": ["offset_x", "offset_y", "offset_z"]
@@ -837,7 +840,7 @@
 						"description": "If specified, the entity condition type will check if this bi-entity condition type is fulfilled by either or both the 'actor' (the entity being checked by the entity condition type) and 'target' (the entity that has hit by the ray-cast)."
 					},
 					"block_condition": {
-						"$ref": "#/properties/block_condition",
+						"$ref": "../conditions/block.json",
 						"description": "If specified, the entity condition type will check if the block that was hit by the ray-cast fulfills this block condition type."
 					}
 				},

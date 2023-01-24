@@ -423,6 +423,9 @@
 						"description": "If `true`, the dropped items will have their `Thrower` NBT set as the `UUID` NBT of the entity that invoked the action.",
 						"type": "boolean",
 						"default": true
+					},
+					"amount": {
+						"description": "TODO"
 					}
 				}
 			}
@@ -914,7 +917,6 @@
 					},
 					"slots": {
 						"description": "If specified, only items in the designated slots will be replaced.",
-						"minItems": 2,
 						"items": {"$ref": "../data_types/item_slot.json"}
 					},
 					"power": {
@@ -925,6 +927,9 @@
 					"stack": {
 						"description": "The item to use as a replacement for the affected items.",
 						"$ref": "../data_types/item_stack.json"
+					},
+					"merge_nbt": {
+						"description": "TODO"
 					}
 				},
 				"required": ["stack"]

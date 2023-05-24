@@ -277,10 +277,18 @@
 						"description": "The amount of damage to deal."
 					},
 					"source": {
-						"$ref": "../data_types/damage_source.json"
+						"$ref": "../data_types/damage_source.json",
+						"description": "[DEPRECATED]Use `damage_type` instead.",
+						"deprecated": true
+					},
+					"damage_type": {
+						"description": "The damage type to be used. Controls e.g. the death message, invulnerabilities (e.g. towards fire), or whether armor is taken into account.",
+						"type": "string",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"examples": ["minecraft:cramming", "minecraft:on_fire"]
 					}
 				},
-				"required": ["amount", "source"]
+				"required": ["amount", "damage_type"]
 			}
 		}
 	]

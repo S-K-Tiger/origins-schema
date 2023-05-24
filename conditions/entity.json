@@ -15,7 +15,7 @@
 				"origins:creative_flying", "origins:daytime", "origins:dimension", "origins:distance_from_coordinates",
 				"origins:elytra_flight_possible", "origins:enchantment", "origins:entity_group", "origins:entity_type",
 				"origins:equipped_item", "origins:exists", "origins:exposed_to_sky", "origins:exposed_to_sun", "origins:fall_distance",
-				"origins:fall_flying", "origins:fluid_height", "origins:food_level", "origins:gamemode", "origins:health",
+				"origins:fall_flying", "origins:fluid_height", "origins:food_level", "origins:gamemode", "origins:glowing", "origins:health",
 				"origins:in_block_anywhere", "origins:in_block", "origins:in_rain", "origins:in_tag", "origins:invisible", "origins:living",
 				"origins:moving", "origins:nbt", "origins:on_block", "origins:on_fire", "origins:origin", "origins:passenger_recursive",
 				"origins:passenger", "origins:power_active", "origins:power_type", "origins:power", "origins:predicate", "origins:raycast",
@@ -210,7 +210,7 @@
 				"properties": {
 					"block_condition": {
 						"$ref": "../conditions/block.json",
-						"description": "TODO"
+						"description": "If specified, the condition type will only evaluate to true if the bounding box of the entity is colliding with a block that fulfills this condition."
 					},
 					"offset_x": {
 						"description": "By how much of the bounding box size should the box be offset in the X direction (e.g.: 0 = no offset, 1 = offset of exact width, 2 = offset of twice the width of the bounding box)",

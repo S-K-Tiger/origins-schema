@@ -10,8 +10,7 @@
 			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 			"examples": [
 				"origins:and", "origins:constant", "origins:or",
-				"origins:amount", "origins:attacker", "origins:bypasses_armor", "origins:explosive", "origins:fire", "origins:from_falling",
-				"origins:name", "origins:out_of_world", "origins:projectile", "origins:unblockable"
+				"origins:amount", "origins:attacker", "origins:in_tag", "origins:name", "origins:projectile"
 			]
 		},
 		"inverted": {
@@ -107,6 +106,24 @@
 		},
 		{
 			"if": {
+				"properties": { "type": {"const":"origins:in_tag"} },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/damage_condition_types/in_tag/"
+			},
+			"then": {
+				"properties": {
+					"tag": {
+						"description": "The namespace and ID of the tag which the damage type should be in to pass the check.",
+						"type": "string",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"examples": ["minecraft:is_drowning"]
+					}
+				},
+				"required": ["tag"]
+			}
+		},
+		{
+			"if": {
 				"properties": { "type": {"const":"origins:name"} },
 				"require": ["type"],
 				"$comment": "https://origins.readthedocs.io/en/latest/types/damage_condition_types/name/"
@@ -148,6 +165,10 @@
 						"description": "If set, the check will only pass if the projectile was of an entity type with the specified namespace and ID.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:spectral_arrow"]
+					},
+					"projectile_condition": {
+						"$ref": "../conditions/entity.json",
+						"description": "If set, the check will only pass if the projectile entity fulfills this condition."
 					}
 				}
 			}

@@ -6,34 +6,34 @@
 	"properties": {
 		"effect": {
 			"type": "string",
-			"description": "ID of the status effect.",
+			"description": "The identifier of the status effect.",
 			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 			"examples": ["minecraft:slowness", "minecraft:levitation", "minecraft:slow_falling"]
 		},
 		"duration": {
 			"type": "integer",
-			"description": "Duration of the status effect in ticks.",
+			"description": "Determines the duration of the status effect (in ticks).",
 			"default": 100,
 			"minimum": 1
 		},
 		"amplifier": {
 			"type": "integer",
-			"description": "Amplifier of the status effect.",
+			"description": "Determines the strength of the status effect (0 being level 1).",
 			"default": 0
 		},
 		"is_ambient": {
 			"type": "boolean",
-			"description": "Whether the effect counts as an ambient effect.",
+			"description": "Determines whether the particle effects of the status effect is less noticable.",
 			"default": false
 		},
 		"show_particles": {
 			"type": "boolean",
-			"description": "Whether the status effect will spawn particles on the player.",
+			"description": "Determines whether the status effect should display particle effects on the entity.",
 			"default": true
 		},
 		"show_icon": {
 			"type": "boolean",
-			"description": "Whether the status effect will show an icon on the HUD.",
+			"description": "Determines whether the status effect would display an icon on the HUD.",
 			"default": true
 		}
 	},

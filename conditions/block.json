@@ -10,10 +10,10 @@
 			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 			"examples": [
 				"origins:and", "origins:constant", "origins:or", "origins:offset",
-				"origins:adjacent", "origins:attachable", "origins:blast_resistance", "origins:block_state", "origins:block",
-				"origins:distance_from_coordinates", "origins:exposed_to_sky", "origins:fluid", "origins:hardness", "origins:height",
-				"origins:in_tag", "origins:light_blocking", "origins:light_level", "origins:material", "origins:movement_blocking",
-				"origins:nbt", "origins:replacable", "origins:slipperiness", "origins:water_loggable"
+				"origins:adjacent", "origins:attachable", "origins:blast_resistance", "origins:block_entity", "origins:block_state",
+				"origins:block", "origins:distance_from_coordinates", "origins:exposed_to_sky", "origins:fluid", "origins:hardness",
+				"origins:height", "origins:in_tag", "origins:light_blocking", "origins:light_level", "origins:material",
+				"origins:movement_blocking", "origins:nbt", "origins:replacable", "origins:slipperiness", "origins:water_loggable"
 			]
 		},
 		"inverted": {

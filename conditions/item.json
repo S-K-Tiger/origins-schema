@@ -10,9 +10,9 @@
 			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 			"examples": [
 				"origins:and", "origins:constant", "origins:or",
-				"origins:amount", "origins:armor_value", "origins:durability", "origins:empty", "origins:enchantment", "origins:fireproof",
-				"origins:food", "origins:harvest_level", "origins:ingredient", "origins:is_damageable", "origins:is_equippable", "origins:meat",
-				"origins:nbt", "origins:relative_durability", "origins:smeltable"
+				"origins:amount", "origins:armor_value", "origins:durability", "origins:empty", "origins:enchantable", "origins:enchantment",
+				"origins:fireproof", "origins:food", "origins:harvest_level", "origins:has_power", "origins:ingredient", "origins:is_damageable",
+				"origins:is_equippable", "origins:meat", "origins:nbt", "origins:power_count", "origins:relative_durability", "origins:smeltable"
 			]
 		},
 		"inverted": {
@@ -141,20 +141,20 @@
 				"properties": {
 					"enchantment": {
 						"type": "string",
-						"description": "ID of the enchantment of interest",
+						"description": "ID of the enchantment of interest.\nIf not set, amount of enchantments will be checked instead.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:aqua_affinity", "minecraft:bane_of_arthropods", "minecraft:blast_protection", "minecraft:channeling", "minecraft:protection", "minecraft:fortune"]
 					},
 					"comparison": {
-						"description": "How to compare the enchantment level to the specified value.",
+						"description": "How to compare the enchantment level, or the amount of enchantments, to the specified value.",
 						"enum": ["<", "<=", ">", ">=", "==", "!="]
 					},
 					"compare_to": {
 						"type": "integer",
-						"description": "Which value to compare the enchantment level against."
+						"description": "Which value to compare the enchantment level or amount against."
 					}
 				},
-				"required": ["enchantment", "comparison", "compare_to"]
+				"required": ["comparison", "compare_to"]
 			}
 		},
 		{
@@ -168,7 +168,6 @@
 					"comparison": {
 						"description": "How to compare the item's harvest level to the specified value.",
 						"enum": ["<", "<=", ">", ">=", "==", "!="]
-						
 					},
 					"compare_to": {
 						"type": "integer",
@@ -176,6 +175,27 @@
 					}
 				},
 				"required": ["comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:has_power"} },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/item_condition_types/has_power/"
+			},
+			"then": {
+				"properties": {
+					"power": {
+						"description": "The ID of the power to check for.",
+						"type": "string",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+					},
+					"slot": {
+						"description": "If specified, this will check if the power embedded to the item is assigned to this equipment slot.",
+						"enum": ["head", "chest", "legs", "feet", "mainhand", "offhand"]
+					}
+				},
+				"required": ["power"]
 			}
 		},
 		{
@@ -210,6 +230,30 @@
 					}
 				},
 				"required": ["nbt"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:power_count"} },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/item_condition_types/power_count/"
+			},
+			"then": {
+				"properties": {
+					"slot": {
+						"description": "If specified, this will check how many powers are assigned to this equipment slot.",
+						"enum": ["head", "chest", "legs", "feet", "mainhand", "offhand"]
+					},
+					"comparison": {
+						"description": "Determines how the amount of powers embedded in the item is compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"description": "The value to compare the amount of powers embedded in the item to.",
+						"type": "integer"
+					}
+				},
+				"required": ["comparison", "compare_to"]
 			}
 		},
 		{

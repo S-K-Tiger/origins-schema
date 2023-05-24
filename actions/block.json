@@ -10,7 +10,7 @@
 			"examples": [
 				"origins:and", "origins:chance", "origins:choice", "origins:delay",
 				"origins:if_else_list", "origins:if_else", "origins:nothing", "origins:side",
-				"origins:offset",
+				"origins:area_of_effect", "origins:offset",
 				"origins:add_block", "origins:bonemeal", "origins:execute_command",
 				"origins:explode", "origins:modify_block_state", "origins:set_block"
 			]
@@ -171,6 +171,35 @@
 		},
 		{
 			"if": {
+				"properties": { "type": {"const":"origins:area_of_effect"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_action_types/area_of_effect/"
+			},
+			"then": {
+				"properties": {
+					"block_action": {
+						"$ref": "#",
+						"description": "The action to apply to the blocks."
+					},
+					"radius": {
+						"description": "Determines the radius of the area to execute the action on.",
+						"type": "integer",
+						"default": 16
+					},
+					"shape": {
+						"description": "The shape in which to affect blocks",
+						"enum": ["cube", "star", "sphere"],
+						"default": "cube"
+					},
+					"block_condition": {
+						"$ref": "../conditions/block.json",
+						"description": "If specified, the specified action will only apply to blocks that fulfill this condition."
+					}
+				},
+				"required": ["block_action"]
+			}
+		},
+		{
+			"if": {
 				"properties": { "type": {"const":"origins:offset"} }, "required": ["type"],
 				"$comment": "https://origins.readthedocs.io/en/latest/types/block_action_types/offset/"
 			},
@@ -280,7 +309,7 @@
 						"type":"boolean",
 						"default": true,
 						"description": "[Deprecated]Determines if the exploding block should be affected by the summoned explosion.",
-						"depricated": true
+						"deprecated": true
 					},
 					"indestructible": {
 						"$ref": "../conditions/block.json",

@@ -13,9 +13,9 @@
 				"origins:conditioned_restrict_armor", "origins:cooldown", "origins:creative_flight", "origins:damage_over_time",
 				"origins:disable_regen", "origins:effect_immunity", "origins:elytra_flight", "origins:entity_glow",
 				"origins:entity_group", "origins:exhaust", "origins:fire_immunity", "origins:fire_projectile", "origins:freeze",
-				"origins:ignore_water", "origins:inventory", "origins:invisibility", "origins:invulnerability", "origins:item_on_item",
-				"origins:keep_inventory", "origins:launch", "origins:lava_vision", "origins:model_color", "origins:multiple",
-				"origins:night_vision", "origins:overlay", "origins:particle", "origins:phasing", "origins:recipe",
+				"origins:grounded", "origins:ignore_water", "origins:inventory", "origins:invisibility", "origins:invulnerability",
+				"origins:item_on_item", "origins:keep_inventory", "origins:launch", "origins:lava_vision", "origins:model_color",
+				"origins:multiple", "origins:night_vision", "origins:overlay", "origins:particle", "origins:phasing", "origins:recipe",
 				"origins:replace_loot_table", "origins:resource", "origins:restrict_armor", "origins:self_glow", "origins:shader",
 				"origins:shaking", "origins:simple", "origins:stacking_status_effect", "origins:starting_equipment",
 				"origins:status_bar_texture", "origins:swimming", "origins:toggle_night_vision", "origins:toggle", "origins:tooltip",
@@ -365,7 +365,15 @@
 					},
 					"damage_source": {
 						"$ref": "./data_types/damage_source.json",
-						"description": "If set, this is the damage source that will be used to deal the damage."
+						"description": "[DEPRECATED]If set, this is the damage source that will be used to deal the damage.\nUse `damage_type` instead.",
+						"deprecated": true
+					},
+					"damage_type": {
+						"description": "The damage type to be used. Controls e.g. the death message, invulnerabilities (e.g. towards fire), or whether armor is taken into account.",
+						"type": "string",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"examples": ["minecraft:cramming", "minecraft:on_fire"],
+						"default": "apoli:damage_over_time"
 					},
 					"protection_enchantment": {
 						"type": "string",
@@ -626,15 +634,16 @@
 			"then": {
 				"properties": {
 					"render_armor": {
-						"description": "Whether or not the player's armor should be shown.",
-						"type": "boolean"
+						"description": "Determines whether armor should be shown or not.",
+						"type": "boolean",
+						"default": false
 					},
 					"render_outline": {
-						"description": "Whether glowing outlines are visible.",
-						"type": "boolean"
+						"description": "Determines whether the glowing outline should be shown or not.",
+						"type": "boolean",
+						"default": false
 					}
-				},
-				"required": ["render_armor"]
+				}
 			}
 		},
 		{
@@ -836,7 +845,7 @@
 				"properties": {
 					"strength": {
 						"type": "number",
-						"description": "How strong the night vision effect is.",
+						"description": "Determines how strong the night vision effect is.",
 						"minimum": 0.0, "maximum": 1.0,
 						"default": 1.0
 					}
@@ -917,15 +926,36 @@
 						"description": "Determines how often the particles should spawn (interval in ticks).",
 						"minimum": 1
 					},
+					"count": {
+						"description": "Determines the amount of particles to spawn.",
+						"type": "integer",
+						"default": 1
+					},
+					"speed": {
+						"description": "Determines the speed of the specified particle type.",
+						"type": "number",
+						"default": 0.0
+					},
+					"spread": {
+						"$ref": "./data_types/vector.json",
+						"description": "Determines the size of the three-dimensional cuboid volume to spawn the specified particle type in.",
+						"default": {"x": 0.25, "y": 0.5, "z": 0.25}
+					},
+					"offset_y": {
+						"description": "The offset of where the particle will be centered in the Y axis.",
+						"type": "number",
+						"default": 1.0
+					},
 					"visible_in_first_person": {
 						"description": "Determines whether the particle should be visible in first person.",
-						"type":"boolean",
-						"default":false
+						"type": "boolean",
+						"default": false
 					},
-					"visible_while_invisible": {},
-					"count": {},
-					"spread": {},
-					"offset_y": {}
+					"visible_while_invisible": {
+						"description": "Determines whether the particle type should be visible if the entity is invisible.",
+						"type": "boolean",
+						"default": false
+					}
 				},
 				"required": ["particle", "frequency"]
 			}
@@ -1551,6 +1581,16 @@
 					"item_condition": {
 						"$ref": "./conditions/item.json",
 						"description": "If specified, the actions will only execute if this condition is fulfilled by the item before use."
+					},
+					"trigger": {
+						"description": "Defines when the action is executed.",
+						"enum": ["finish", "start", "stop", "during", "instant"],
+						"default": "finish"
+					},
+					"priority": {
+						"description": "Determines the execution priority of the power.",
+						"type": "integer",
+						"default": 0
 					}
 				},
 				"anyOf": [ {"required": ["entity_action"]}, {"required": ["item_action"]} ]
@@ -2308,15 +2348,15 @@
 					},
 					"biome": {
 						"type": "string",
-						"description": "If specified, the player will only spawn in the biome that matches the specified namespace and ID.",
+						"description": "If specified, the player will only spawn in the biome that matches the specified namespace and ID.\nSee: https://minecraft.fandom.com/wiki/Biome#Biome_IDs for a list of biome IDs.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:savanna"]
 					},
 					"structure": {
 						"type": "string",
-						"description": "If specified, the player will only spawn in the specified namespace and ID of the structure.\nThe structure needs to generate in the specified dimension!\nKeep in mind that structure location is costly and it might take one or two seconds before the player gets teleported when choosing the power.",
+						"description": "If specified, the player will only spawn in the specified namespace and ID of the structure.\nSee https://minecraft.fandom.com/wiki/Generated_structures#ID for a list of structure IDs.\nThe structure needs to generate in the specified dimension!\nKeep in mind that structure location is costly and it might take one or two seconds before the player gets teleported when choosing the power.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
-						"examples": ["minecraft:endcity"]
+						"examples": ["minecraft:end_city"]
 					},
 					"spawn_strategy": {
 						"type": "string",

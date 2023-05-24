@@ -27,6 +27,10 @@
 		"name": {
 			"type": "string",
 			"description": "A descriptive name for the modifier, describing where it comes from."
+		},
+		"modifier": {
+			"$ref": "../data_types/modifier.json",
+			"description": "If specified, this modifier will be applied to the value of the modifier."
 		}
 	},
 	"required": ["operation", "value"]

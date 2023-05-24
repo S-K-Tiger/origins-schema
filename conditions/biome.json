@@ -78,7 +78,7 @@
 				"properties": {
 					"category": {
 						"type": "string",
-						"description": "[Condition depricated]Which category the biome must be in order to succeed the check.\nSee https://origins.readthedocs.io/en/latest/misc/extras/biome_categories/.",
+						"description": "[Condition deprecated]Which category the biome must be in order to succeed the check.\nSee https://origins.readthedocs.io/en/latest/misc/extras/biome_categories/.",
 						"examples": [
 							"beach", "desert", "extreme_hills", "forest", "icy", "jungle", "mesa",
 							"mountain", "mushroom", "nether", "none", "ocean", "plains", "river",
@@ -113,7 +113,7 @@
 			"then": {
 				"properties": {
 					"precipitation": {
-						"description": "Which precipitation the biome has to have in order to succeed the check. Accepts \"none\", \"rain\" or \"snow\".",
+						"description": "Which precipitation the biome has to have in order to succeed the check.\nAccepts \"none\", \"rain\" or \"snow\".\nDue to limitations with the system, this will check precipitation at a world height of 64.",
 						"enum": ["none", "rain", "snow"]
 					}
 				},

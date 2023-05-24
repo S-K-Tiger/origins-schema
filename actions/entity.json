@@ -14,11 +14,12 @@
 				"origins:change_resource", "origins:clear_effect", "origins:crafting_table", "origins:damage", "origins:dismount",
 				"origins:drop_inventory", "origins:emit_game_event", "origins:ender_chest", "origins:equipped_item_action",
 				"origins:execute_command", "origins:exhaust", "origins:explode", "origins:extinguish", "origins:feed", "origins:gain_air",
-				"origins:give", "origins:grant_power", "origins:heal", "origins:modify_death_ticks", "origins:modify_inventory",
-				"origins:modify_resource", "origins:modify_stat", "origins:passenger_action", "origins:play_sound", "origins:raycast",
-				"origins:replace_inventory", "origins:revoke_power", "origins:riding_action", "origins:set_fall_distance",
-				"origins:set_on_fire", "origins:spawn_effect_cloud", "origins:spawn_entity", "origins:spawn_particles", "origins:swing_hand",
-				"origins:toggle", "origins:trigger_cooldown"
+				"origins:give", "origins:grant_advancement", "origins:grant_power", "origins:heal", "origins:modify_death_ticks",
+				"origins:modify_inventory", "origins:modify_resource", "origins:modify_stat", "origins:passenger_action",
+				"origins:play_sound", "origins:raycast", "origins:replace_inventory", "origins:revoke_advancement", "origins:revoke_power",
+				"origins:riding_action", "origins:selector_action", "origins:set_fall_distance", "origins:set_on_fire",
+				"origins:spawn_effect_cloud", "origins:spawn_entity", "origins:spawn_particles", "origins:swing_hand", "origins:toggle",
+				"origins:trigger_cooldown"
 			]
 		}
 	},
@@ -370,9 +371,19 @@
 						"type": "number",
 						"description": "The amount of damage to deal."
 					},
-					"source": {"$ref": "../data_types/damage_source.json"}
+					"source": {
+						"$ref": "../data_types/damage_source.json",
+						"description": "[DEPRECATED]Use `damage_type` instead.",
+						"deprecated": true
+					},
+					"damage_type": {
+						"description": "The damage type to be used. Controls e.g. the death message, invulnerabilities (e.g. towards fire), or whether armor is taken into account.",
+						"type": "string",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"examples": ["minecraft:cramming", "minecraft:on_fire"]
+					}
 				},
-				"required": ["amount", "source"]
+				"required": ["amount", "damage_type"]
 			}
 		},
 		{
@@ -425,7 +436,8 @@
 						"default": true
 					},
 					"amount": {
-						"description": "TODO"
+						"description": "If specified, the affected items will be split by this amount.",
+						"type": "integer"
 					}
 				}
 			}
@@ -615,6 +627,23 @@
 		},
 		{
 			"if": {
+				"properties": { "type": { "enum": ["origins:grant_advancement", "origins:revoke_advancement"] } }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/grant_advancement/ https://origins.readthedocs.io/en/latest/types/entity_action_types/revoke_advancement/"
+			},
+			"then": {
+				"properties": {
+					"advancement": {
+						"type": "string",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"description": "The namespace and ID of the advancement to be granted/revoked from the player.",
+						"examples": ["minecraft:adventure/arbalistic"]
+					}
+				},
+				"required": ["advancement"]
+			}
+		},
+		{
+			"if": {
 				"properties": { "type": { "enum": ["origins:grant_power", "origins:revoke_power"] } }, "required": ["type"],
 				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/grant_power/ https://origins.readthedocs.io/en/latest/types/entity_action_types/revoke_power/"
 			},
@@ -684,7 +713,7 @@
 						"$ref": "../actions/entity.json"
 					},
 					"item_action": {
-						"description": "If specified, this action will be executed on the affected items.",
+						"description": "The action to be executed on the affected items.",
 						"$ref": "../actions/item.json"
 					},
 					"item_condition": {
@@ -705,7 +734,8 @@
 						"type": "string",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
 					}
-				}
+				},
+				"required": ["item_action"]
 			}
 		},
 		{
@@ -736,10 +766,8 @@
 			"then": {
 				"properties": {
 					"stat": {
-						"description": "The namespace and ID of the statistic to be modified.\nSee: https://minecraft.fandom.com/wiki/Statistics#Resource_location",
-						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
-						"examples": ["minecraft.custom:minecraft.time_since_rest"]
+						"$ref": "../data_types/stat.json",
+						"description": "The type and name of the statistic to be modified."
 					},
 					"modifier": {
 						"$ref": "../data_types/modifier.json",
@@ -929,7 +957,9 @@
 						"$ref": "../data_types/item_stack.json"
 					},
 					"merge_nbt": {
-						"description": "TODO"
+						"description": "Determines whether to merge the NBTs of the item that will be replaced and the NBTs of the item that will be used as a replacement.",
+						"type": "boolean",
+						"default": false
 					}
 				},
 				"required": ["stack"]
@@ -960,6 +990,29 @@
 						"default": false
 					}
 				}
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:selector_action"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/selector_action/"
+			},
+			"then": {
+				"properties": {
+					"selector": {
+						"description": "The selector to use for selecting entities. It can be the username of a player, the UUID of the entity or a target selector.",
+						"type": "string"
+					},
+					"bientity_action": {
+						"$ref": "../actions/bientity.json",
+						"description": "If specified, this action will be executed on either or both the actor and target entities."
+					},
+					"bientity_condition": {
+						"$ref": "../conditions/bientity.json",
+						"description": "If specified, the specified action will only be executed if this condition is fulfilled by either or both the actor and target entities."
+					}
+				},
+				"required": ["selector"]
 			}
 		},
 		{

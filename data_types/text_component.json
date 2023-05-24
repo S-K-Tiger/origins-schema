@@ -69,7 +69,7 @@
 				},
 				"value": {
 					"type":"string",
-					"depricated":true,
+					"deprecated":true,
 					"description": "[Deprecated]The formatting and type of this tag varies depending on the action."
 				}
 			},

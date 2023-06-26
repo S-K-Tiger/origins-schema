@@ -12,9 +12,9 @@
 		},
 		"duration": {
 			"type": "integer",
-			"description": "Determines the duration of the status effect (in ticks).",
+			"description": "Determines the duration of the status effect (in ticks).\nTo make the Status Effect Instance infinite, you can set this value to -1.",
 			"default": 100,
-			"minimum": 1
+			"minimum": -1
 		},
 		"amplifier": {
 			"type": "integer",
@@ -23,7 +23,7 @@
 		},
 		"is_ambient": {
 			"type": "boolean",
-			"description": "Determines whether the particle effects of the status effect is less noticable.",
+			"description": "Determines whether the particle effects of the status effect is less noticeable.",
 			"default": false
 		},
 		"show_particles": {
@@ -39,7 +39,8 @@
 	},
 	"required": ["effect"],
 	"examples": [
-		{"effect":"minecraft:slowness","amplifier":1,"duration":80},
+		{"effect":"minecraft:slowness","amplifier":1,"duration":-1},
+		{"effect": "minecraft:levitation","duration":200,"is_ambient":true,"show_particles":true,"show_icon":false},
 		[{"effect":"minecraft:slow_falling","duration":400,"show_particles":false},{"effect":"minecraft:slowness","duration":400,"show_particles":false}]
 	]
 }

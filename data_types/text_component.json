@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "origins_data_type_text_component",
-	"description": "A string or object used for displaying text with fancy formatting.\nSee: https://minecraft.fandom.com/wiki/Raw_JSON_text_format",
+	"description": "A string or object used for displaying text with fancy formatting.\nSee: https://minecraft.wiki/w/Raw_JSON_text_format",
 	"type":["string", "boolean", "number", "array", "object"],
 	"properties": {
 		"color": {

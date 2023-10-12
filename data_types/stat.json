@@ -5,7 +5,7 @@
 	"type": "object",
 	"properties": {
 		"type": {
-			"description": "The type of the statistic.\nSee: https://minecraft.fandom.com/wiki/Statistics#Resource_location for a list of vanilla statistic types and names.",
+			"description": "The type of the statistic.\nSee: https://minecraft.wiki/w/Statistics#Resource_location for a list of vanilla statistic types and names.",
 			"type": "string",
 			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 			"examples": [

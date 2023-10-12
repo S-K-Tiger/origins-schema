@@ -10,8 +10,11 @@
 			"examples": [
 				"origins:and", "origins:chance", "origins:choice", "origins:delay",
 				"origins:if_else_list", "origins:if_else", "origins:nothing", "origins:side",
-				"origins:consume", "origins:damage", "origins:merge_nbt", "origins:modify", "origins:remove_enchantment"
-			]
+				"origins:consume", "origins:damage", "origins:merge_nbt", "origins:modify", "origins:remove_enchantment",
+
+				"origins:holder"
+			],
+			"$comment": "origins:holder was mentioned on the Discord but has not appeared in the docs yet."
 		}
 	},
 	"required": ["type"],

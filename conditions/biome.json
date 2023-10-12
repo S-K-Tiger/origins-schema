@@ -133,7 +133,7 @@
 					},
 					"compare_to": {
 						"type": "number",
-						"description": "Which value the temperature should be compared to.\nSee https://minecraft.fandom.com/wiki/Biome#List_of_Overworld_climates for a list of temperature values for the vanilla biomes."
+						"description": "Which value the temperature should be compared to.\nSee https://minecraft.wiki/w/Biome#List_of_Overworld_climates for a list of temperature values for the vanilla biomes."
 					}
 				},
 				"required": ["comparison", "compare_to"]

@@ -6,7 +6,7 @@
 	"properties": {
 		"type": {
 			"type": "string",
-			"description": "The namespace and ID of the particle type.\nRefer to https://minecraft.fandom.com/wiki/Particles#Particle_IDs for a list of vanilla particle type IDs that you can use.",
+			"description": "The namespace and ID of the particle type.\nRefer to https://minecraft.wiki/w/Particles#Particle_IDs for a list of vanilla particle type IDs that you can use.",
 			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 			"examples": [
 				"minecraft:ambient_entity_effect", "minecraft:angry_villager", "minecraft:ash", "minecraft:block",

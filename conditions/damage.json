@@ -113,7 +113,7 @@
 			"then": {
 				"properties": {
 					"tag": {
-						"description": "The namespace and ID of the tag which the damage type should be in to pass the check.",
+						"description": "The namespace and ID of the tag which the damage type should be in to pass the check.\nSee: https://minecraft.wiki/w/Tag#Damage_types for a list of of damage type tags provided/used in vanilla.",
 						"type": "string",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:is_drowning"]

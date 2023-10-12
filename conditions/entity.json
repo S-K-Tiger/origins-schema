@@ -16,8 +16,8 @@
 				"origins:elytra_flight_possible", "origins:enchantment", "origins:entity_group", "origins:entity_type",
 				"origins:equipped_item", "origins:exists", "origins:exposed_to_sky", "origins:exposed_to_sun", "origins:fall_distance",
 				"origins:fall_flying", "origins:fluid_height", "origins:food_level", "origins:gamemode", "origins:glowing", "origins:health",
-				"origins:in_block_anywhere", "origins:in_block", "origins:in_rain", "origins:in_tag", "origins:invisible", "origins:living",
-				"origins:moving", "origins:nbt", "origins:on_block", "origins:on_fire", "origins:origin", "origins:passenger_recursive",
+				"origins:in_block_anywhere", "origins:in_block", "origins:in_rain", "origins:in_tag", "origins:inventory", "origins:invisible",
+				"origins:living", "origins:moving", "origins:nbt", "origins:on_block", "origins:on_fire", "origins:origin", "origins:passenger_recursive",
 				"origins:passenger", "origins:power_active", "origins:power_type", "origins:power", "origins:predicate", "origins:raycast",
 				"origins:relative_health", "origins:resource", "origins:riding_recursive", "origins:riding_root", "origins:riding",
 				"origins:saturation_level", "origins:scoreboard", "origins:sneaking", "origins:sprinting", "origins:status_effect",
@@ -143,7 +143,7 @@
 				"properties": {
 					"attribute": {
 						"type": "string",
-						"description": "ID of the attribute of which the value should be checked. See https://minecraft.fandom.com/wiki/Attribute#Attributes for a list of vanilla attributes that can be checked for.",
+						"description": "ID of the attribute of which the value should be checked. See https://minecraft.wiki/w/Attribute#Attributes for a list of vanilla attributes that can be checked for.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": [
 							"minecraft:generic.max_health", "minecraft:generic.follow_range",
@@ -305,7 +305,7 @@
 					},
 					"permission_level": {
 						"type": "integer",
-						"description": "[Deprecated since 1.1.0]The permission level to use for the command. 0 is a \"survival player\", anything higher emulates some form of operator. See https://minecraft.fandom.com/wiki/Server.properties#op-permission-level for details.",
+						"description": "[Deprecated since 1.1.0]The permission level to use for the command. 0 is a \"survival player\", anything higher emulates some form of operator. See https://minecraft.wiki/w/Server.properties#op-permission-level for details.",
 						"default": 4,
 						"minimum": 0,
 						"maximum": 4,
@@ -451,7 +451,7 @@
 			"then": {
 				"properties": {
 					"group": {
-						"description": "Entity group required for the entity to pass the check. One of default, undead, arthropod, illager and aquatic.\nSee https://minecraft.fandom.com/wiki/Mob#Classification for more information about entity groups.",
+						"description": "Entity group required for the entity to pass the check. One of default, undead, arthropod, illager and aquatic.\nSee https://minecraft.wiki/w/Mob#Classification for more information about entity groups.",
 						"enum": ["default", "undead", "arthropod", "illager", "aquatic"]
 					}
 				},
@@ -647,6 +647,64 @@
 					}
 				},
 				"required": ["tag"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:inventory"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/entity_conditions/inventory/"
+			},
+			"then": {
+				"properties": {
+					"inventory_types": {
+						"type": "array",
+						"description": "Determines whether to check for items in the entity's inventory, inventories of powers present in the entity, or both.",
+						"items": {
+							"enum": ["inventory", "power"]
+						},
+						"minItems": 1,
+						"uniqueItems": true,
+						"default": ["inventory"]
+					},
+					"process_mode": {
+						"description": "Determines how the item stacks in the specified inventory/inventories are evaluated.",
+						"enum": ["items", "stacks"],
+						"default": "items"
+					},
+					"item_condition": {
+						"description": "If specified, only account for items from the specified inventory/inventories that fulfill this condition.",
+						"$ref": "../conditions/item.json"
+					},
+					"slots": {
+						"type":"array",
+						"description": "If specified, only items from these specified item slots are evaluated.",
+						"items": {
+							"$ref": "../data_types/item_slot.json"
+						}
+					},
+					"slot": {
+						"description": "If specified, only the item from this specified item slot is evaluated.",
+						"$ref": "../data_types/item_slot.json"
+					},
+					"power": {
+						"type":"string",
+						"description": "If specified and if inventory_type is \"power\", the items in the inventory of this power will be evaluated instead.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+					},
+					"comparison": {
+						"description": "Determines how the amount of items/stacks that were evaluated are compared to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="],
+						"default": ">"
+					},
+					"compare_to": {
+						"type":"integer",
+						"description": "The value at which the amount of items/stacks that were evaluated are compared to.",
+						"default": 0
+					}
+				},
+				"not": {
+					"required": ["slots", "slot"]
+				}
 			}
 		},
 		{
@@ -1049,7 +1107,7 @@
 					},
 					"compare_to": {
 						"type": "integer",
-						"description": "The value to compare the current day time ticks of the world to.\nSee https://minecraft.fandom.com/wiki/Daylight_cycle#24-hour_Minecraft_day for how this value coresponds to the ingame value.",
+						"description": "The value to compare the current day time ticks of the world to.\nSee https://minecraft.wiki/w/Daylight_cycle#24-hour_Minecraft_day for how this value coresponds to the ingame value.",
 						"minimum": 0,
 						"maximum": 24000
 					}

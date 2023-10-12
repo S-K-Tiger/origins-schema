@@ -105,7 +105,7 @@
 					},
 					"compare_to": {
 						"type": "integer",
-						"description": "Which value to compare the item's armor value to.\nNon-armor items are considered as having an armor value of 0.\nSee https://minecraft.fandom.com/wiki/Helmet#Defense_points, https://minecraft.fandom.com/wiki/Chestplate#Defense_points, https://minecraft.fandom.com/wiki/Leggings#Defense_points and https://minecraft.fandom.com/wiki/Boots#Defense_points"
+						"description": "Which value to compare the item's armor value to.\nNon-armor items are considered as having an armor value of 0.\nSee https://minecraft.wiki/w/Helmet#Defense_points, https://minecraft.wiki/w/Chestplate#Defense_points, https://minecraft.wiki/w/Leggings#Defense_points and https://minecraft.wiki/w/Boots#Defense_points"
 					}
 				},
 				"required": ["comparison", "compare_to"]
@@ -171,7 +171,7 @@
 					},
 					"compare_to": {
 						"type": "integer",
-						"description": "Which value to compare the item's harvest level to.\nRefer to https://minecraft.fandom.com/wiki/Tiers for the harvest level of the materials (there it's called \"mining level\").\nItems without a material are considered to have a harvest level of 0."
+						"description": "Which value to compare the item's harvest level to.\nRefer to https://minecraft.wiki/w/Tiers for the harvest level of the materials (there it's called \"mining level\").\nItems without a material are considered to have a harvest level of 0."
 					}
 				},
 				"required": ["comparison", "compare_to"]

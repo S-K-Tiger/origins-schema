@@ -12,7 +12,7 @@
 				"origins:and", "origins:constant", "origins:or", "origins:offset",
 				"origins:adjacent", "origins:attachable", "origins:blast_resistance", "origins:block_entity", "origins:block_state",
 				"origins:block", "origins:distance_from_coordinates", "origins:exposed_to_sky", "origins:fluid", "origins:hardness",
-				"origins:height", "origins:in_tag", "origins:light_blocking", "origins:light_level", "origins:material",
+				"origins:height", "origins:in_tag", "origins:light_blocking", "origins:light_level",
 				"origins:movement_blocking", "origins:nbt", "origins:replacable", "origins:slipperiness", "origins:water_loggable"
 			]
 		},
@@ -153,7 +153,7 @@
 				"properties": {
 					"property": {
 						"type": "string",
-						"description": "The name of the property that should be checked.\nSee https://minecraft.fandom.com/wiki/Block_states#List_of_block_states for possible values.",
+						"description": "The name of the property that should be checked.\nSee https://minecraft.wiki/w/Block_states#List_of_block_states for possible values.",
 						"examples": ["facing", "waterlogged", "age", "leaves", "stage", "rotation", "open", "axis", "occupied", "part", "honey_level", "attachment", "powered", "tilt", "lit", "has_bottle_0", "drag", "signal_fire", "candles", "level"]
 					},
 					"comparison": {
@@ -281,7 +281,7 @@
 			"then": {
 				"properties": {
 					"comparison": {
-						"description": "Determines how the hardness value of the block is compared to the specified value.\nSee https://minecraft.fandom.com/wiki/Breaking#Blocks_by_hardness for a list of hardness for vanilla blocks",
+						"description": "Determines how the hardness value of the block is compared to the specified value.\nSee https://minecraft.wiki/w/Breaking#Blocks_by_hardness for a list of hardness for vanilla blocks",
 						"enum": ["<", "<=", ">", ">=", "==", "!="]
 					},
 					"compare_to": {
@@ -360,7 +360,7 @@
 				"properties": {
 					"material": {
 						"type":"string",
-						"description": "If specified, checks if the block classifies as this material. See https://origins.readthedocs.io/en/latest/misc/extras/materials/ for possible values.",
+						"description": "[DEPRECATED]If specified, checks if the block classifies as this material. See https://origins.readthedocs.io/en/latest/misc/extras/materials/ for possible values.",
 						"examples": [
 							"air", "structure_void", "portal", "carpet", "plant",
 							"underwater_plant", "replaceable_plant", "nether_shoots",
@@ -375,7 +375,7 @@
 					},
 					"materials": {
 						"type":"array",
-						"description": "If specified, checks if the block classifies as one of these materials. See https://origins.readthedocs.io/en/latest/misc/extras/materials/ for possible values.",
+						"description": "[DEPRECATED]If specified, checks if the block classifies as one of these materials. See https://origins.readthedocs.io/en/latest/misc/extras/materials/ for possible values.",
 						"items": {
 							"type":"string",
 							"description": "If specified, checks if the block classifies as this material. See https://origins.readthedocs.io/en/latest/misc/extras/materials/ for possible values.",

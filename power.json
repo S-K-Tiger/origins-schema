@@ -167,7 +167,7 @@
 					},
 					"attribute": {
 						"type": "string",
-						"description": "The namespace and ID of the attribute to transfer the value from.\nRefer to the https://minecraft.fandom.com/wiki/Attribute page for a list of vanilla attributes that you can get the value from.",
+						"description": "The namespace and ID of the attribute to transfer the value from.\nRefer to the https://minecraft.wiki/w/Attribute page for a list of vanilla attributes that you can get the value from.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": [
 							"minecraft:generic.max_health", "minecraft:generic.follow_range",
@@ -489,7 +489,7 @@
 			"then": {
 				"properties": {
 					"group": {
-						"description": "The group to associate with the player. One of `default`, `undead`, `arthropod`, `illager`, or `aquatic`.\nSee https://minecraft.fandom.com/wiki/Mob#Classification for more information about the entity groups.",
+						"description": "The group to associate with the player. One of `default`, `undead`, `arthropod`, `illager`, or `aquatic`.\nSee https://minecraft.wiki/w/Mob#Classification for more information about the entity groups.",
 						"enum": ["default", "undead", "arthropod", "illager", "aquatic"]
 					}
 				},
@@ -581,6 +581,14 @@
 						"$ref": "./data_types/key.json",
 						"description": "Which active key this power should respond to.\nIf none is specified, this power will use the primary active power key (by default G).\nThe default value is technically `{\"key\": \"none\"}` but Origins adds a power key mapping none to the primary key.",
 						"default": {"key": "key.origins.primary_active"}
+					},
+					"projectile_action": {
+						"description": "If specified, this entity action will be executed on the projectile or entity that will be launched.",
+						"$ref": "./actions/entity.json"
+					},
+					"shooter_action": {
+						"description": "If specified, this entity action will be executed on the entity that has the power.",
+						"$ref": "./actions/entity.json"
 					}
 				},
 				"required": ["entity_type"]
@@ -1156,7 +1164,7 @@
 				"properties": {
 					"shader": {
 						"type": "string",
-						"description": "Specifies the location of the shader resource file to use.\nFor more information about shaders, See https://minecraft.fandom.com/wiki/Shaders/Before_1.9",
+						"description": "Specifies the location of the shader resource file to use.\nFor more information about shaders, See https://minecraft.wiki/w/Shaders/Before_1.9",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:shaders/post/pencil.json"]
 					},
@@ -1322,8 +1330,8 @@
 						"type":"array",
 						"items": {"$ref": "./data_types/text_component.json"}
 					},
-					"priority": {
-						"description": "Determines the placement priority of the tooltip(s) of the power.",
+					"order": {
+						"description": "Determines the placement order of the tooltip(s) of the power.",
 						"type": "integer",
 						"default": 0
 					}
@@ -1921,7 +1929,7 @@
 			"then": {
 				"properties": {
 					"attribute": {
-						"description": "The namespace and ID of the attribute to apply the modifier(s) to.\nRefer to https://minecraft.fandom.com/wiki/Attribute for a list of vanilla attributes that you can modify.",
+						"description": "The namespace and ID of the attribute to apply the modifier(s) to.\nRefer to https://minecraft.wiki/w/Attribute for a list of vanilla attributes that you can modify.",
 						"type": "string",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:generic.attack_damage"]
@@ -2348,13 +2356,13 @@
 					},
 					"biome": {
 						"type": "string",
-						"description": "If specified, the player will only spawn in the biome that matches the specified namespace and ID.\nSee: https://minecraft.fandom.com/wiki/Biome#Biome_IDs for a list of biome IDs.",
+						"description": "If specified, the player will only spawn in the biome that matches the specified namespace and ID.\nSee: https://minecraft.wiki/w/Biome#Biome_IDs for a list of biome IDs.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:savanna"]
 					},
 					"structure": {
 						"type": "string",
-						"description": "If specified, the player will only spawn in the specified namespace and ID of the structure.\nSee https://minecraft.fandom.com/wiki/Generated_structures#ID for a list of structure IDs.\nThe structure needs to generate in the specified dimension!\nKeep in mind that structure location is costly and it might take one or two seconds before the player gets teleported when choosing the power.",
+						"description": "If specified, the player will only spawn in the specified namespace and ID of the structure.\nSee https://minecraft.wiki/w/Generated_structures#ID for a list of structure IDs.\nThe structure needs to generate in the specified dimension!\nKeep in mind that structure location is costly and it might take one or two seconds before the player gets teleported when choosing the power.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:end_city"]
 					},
@@ -2584,7 +2592,7 @@
 				"properties": {
 					"entity_action": {
 						"$ref": "./actions/entity.json",
-						"description": "If specified, execute this entity action type upon preventing the entity that has the power."
+						"description": "If specified, this action will be executed upon the entity trying to fly an Elytra/power that uses the Elytra Flight (Power Type)."
 					}
 				}
 			}
@@ -2707,12 +2715,12 @@
 					"event": {
 						"type":"string",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
-						"description": "If specified, the game event with this namespace and ID will be prevent from being emitted by the entity.\nSee https://minecraft.fandom.com/wiki/Sculk_Sensor#Vibration_amplitudes",
+						"description": "If specified, the game event with this namespace and ID will be prevent from being emitted by the entity.\nSee https://minecraft.wiki/w/Sculk_Sensor#Vibration_amplitudes",
 						"examples": ["minecraft:hit_ground"]
 					},
 					"events": {
 						"type": "array",
-						"description": "If specified, the game events with these namespace and IDs will be prevent from being emitted by the entity.\nSee https://minecraft.fandom.com/wiki/Sculk_Sensor#Vibration_amplitudes",
+						"description": "If specified, the game events with these namespace and IDs will be prevent from being emitted by the entity.\nSee https://minecraft.wiki/w/Sculk_Sensor#Vibration_amplitudes",
 						"items": {
 							"type":"string",
 							"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",

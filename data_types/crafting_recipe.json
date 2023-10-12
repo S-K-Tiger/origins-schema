@@ -1,7 +1,7 @@
 {
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"title": "origins_data_crafting_recipe",
-	"description": "An Object specifying a shapeless or shaped crafting recipe. For some more information, See https://minecraft.gamepedia.com/Recipe",
+	"description": "An Object specifying a shapeless or shaped crafting recipe. For some more information, See https://minecraft.wiki/w/Recipe",
 	"type": "object",
 	"properties": {
 		"type": {

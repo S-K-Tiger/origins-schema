@@ -16,11 +16,11 @@
 				"origins:elytra_flight_possible", "origins:enchantment", "origins:entity_group", "origins:entity_type",
 				"origins:equipped_item", "origins:exists", "origins:exposed_to_sky", "origins:exposed_to_sun", "origins:fall_distance",
 				"origins:fall_flying", "origins:fluid_height", "origins:food_level", "origins:gamemode", "origins:glowing", "origins:health",
-				"origins:in_block_anywhere", "origins:in_block", "origins:in_rain", "origins:in_tag", "origins:inventory", "origins:invisible",
-				"origins:living", "origins:moving", "origins:nbt", "origins:on_block", "origins:on_fire", "origins:origin", "origins:passenger_recursive",
-				"origins:passenger", "origins:power_active", "origins:power_type", "origins:power", "origins:predicate", "origins:raycast",
-				"origins:relative_health", "origins:resource", "origins:riding_recursive", "origins:riding_root", "origins:riding",
-				"origins:saturation_level", "origins:scoreboard", "origins:sneaking", "origins:sprinting", "origins:status_effect",
+				"origins:in_block_anywhere", "origins:in_block", "origins:in_rain", "origins:in_snow", "origins:in_tag", "origins:in_thunderstorm",
+				"origins:inventory", "origins:invisible", "origins:living", "origins:moving", "origins:nbt", "origins:on_block", "origins:on_fire",
+				"origins:origin", "origins:passenger_recursive", "origins:passenger", "origins:power_active", "origins:power_type", "origins:power",
+				"origins:predicate", "origins:raycast", "origins:relative_health", "origins:resource", "origins:riding_recursive", "origins:riding_root",
+				"origins:riding", "origins:saturation_level", "origins:scoreboard", "origins:sneaking", "origins:sprinting", "origins:status_effect",
 				"origins:submerged_in", "origins:swimming", "origins:tamed", "origins:time_of_day", "origins:using_effective_tool",
 				"origins:using_item", "origins:xp_levels", "origins:xp_points"
 			]
@@ -889,6 +889,21 @@
 						"enum": ["any", "none", "source_only"],
 						"default": "any"
 					},
+					"space": {
+						"description": "The space to execute the raycast in. Defaults to `\"local\"` unless `direction` has been specified, in which case it will default to `\"world\"`..\nSee https://origins.readthedocs.io/en/latest/misc/extras/space/",
+						"enum": ["world", "local", "local_horizontal", "local_horizontal_normalized", "velocity", "velocity_normalized", "velocity_horizontal", "velocity_horizontal_normalized"]
+					},
+					"direction": {
+						"type": "object",
+						"properties": {
+							"x": {"type": "number"},
+							"y": {"type": "number"},
+							"z": {"type": "number"}
+						},
+						"description": "Used to specify the direction of the raycast.",
+						"additionalProperties": false,
+						"minProperties": 1
+					},
 					"match_bientity_condition": {
 						"$ref": "../conditions/bientity.json",
 						"description": "If specified, the entity condition type will check if this bi-entity condition type is fulfilled by either or both the 'actor' (the entity being checked by the entity condition type) and 'target' (entity that the ray-cast has gone through). If not, the entity will be ignored."
@@ -897,12 +912,19 @@
 						"$ref": "../conditions/bientity.json",
 						"description": "If specified, the entity condition type will check if this bi-entity condition type is fulfilled by either or both the 'actor' (the entity being checked by the entity condition type) and 'target' (the entity that has hit by the ray-cast)."
 					},
+					"entity_distance": {
+						"type": "number",
+						"description": "Determines the distance of the raycast for entities if `entity` is set to `true`. If absent, it will use the higher value between the entity's attack range (with Reach Entity Attributes compatibility) or the `distance` field."
+					},
 					"block_condition": {
 						"$ref": "../conditions/block.json",
 						"description": "If specified, the entity condition type will check if the block that was hit by the ray-cast fulfills this block condition type."
+					},
+					"block_distance": {
+						"type": "number",
+						"description": "Determines the distance of the raycast for blocks if `block` is set to `true`. If absent, it will use the higher value between the entity's block reach (with Reach Entity Attributes compatibility) or the `distance` field."
 					}
-				},
-				"required": ["distance"]
+				}
 			}
 		},
 		{

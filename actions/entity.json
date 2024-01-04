@@ -381,6 +381,15 @@
 						"type": "string",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:cramming", "minecraft:on_fire"]
+					},
+					"modifier": {
+						"$ref": "./data_types/attributed_modifier.json",
+						"description": "If specified, this modifier will be applied to the damage taken by the 'target' entity."
+					},
+					"modifiers": {
+						"type": "array",
+						"description": "If specified, these modifiers will be applied to the damage taken by the 'target' entity.",
+						"items": {"$ref": "./data_types/attributed_modifier.json"}
 					}
 				},
 				"required": ["amount", "damage_type"]
@@ -676,6 +685,23 @@
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"description": "The namespace and ID of the advancement to be granted/revoked from the player.",
 						"examples": ["minecraft:adventure/arbalistic"]
+					},
+					"criteria": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"minItems": 2,
+						"description": "If specified, determines the criteria to grant/revoke to the specified advancement."
+					},
+					"criterion": {
+						"type": "string",
+						"description": "If specified, determines the criterion to grant/revoke to the specified advancement."
+					},
+					"selection": {
+						"enum": ["only", "through", "from", "until", "everything"],
+						"description": "Determines how to select the parent advancement(s) or child(ren) advancement(s) of the specified advancement.",
+						"default": "only"
 					}
 				},
 				"required": ["advancement"]
@@ -862,9 +888,13 @@
 				"properties": {
 					"sound": {
 						"type": "string",
-						"description": "The namespace and ID of the sound to play.",
+						"description": "The ID of the sound event to play.",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 						"examples": ["minecraft:entity.chicken.egg"]
+					},
+					"category": {
+						"enum": ["master", "music", "record", "weather", "block", "hostile", "neutral", "player", "ambient", "voice"],
+						"description": "If specified, this specifies the category and options the sound event falls under. Otherwise, uses the category specified in the entity that invoked this action."
 					},
 					"volume": {
 						"type": "number",
@@ -912,6 +942,21 @@
 						"default": "none",
 						"description": "Determines how the ray-cast will handle fluids."
 					},
+					"space": {
+						"description": "The space to execute the raycast in. Defaults to `\"local\"` unless `direction` has been specified, in which case it will default to `\"world\"`.\nSee https://origins.readthedocs.io/en/latest/misc/extras/space/",
+						"enum": ["world", "local", "local_horizontal", "local_horizontal_normalized", "velocity", "velocity_normalized", "velocity_horizontal", "velocity_horizontal_normalized"]
+					},
+					"direction": {
+						"type": "object",
+						"properties": {
+							"x": {"type": "number"},
+							"y": {"type": "number"},
+							"z": {"type": "number"}
+						},
+						"description": "Used to specify the direction of the raycast.",
+						"additionalProperties": false,
+						"minProperties": 1
+					},
 					"bientity_condition": {
 						"$ref": "../conditions/bientity.json",
 						"description": "If specified, the specified bi-entity action type will only be executed if the specified bi-entity condition type is fulfilled by either or both the 'actor' (the entity that has the power) or 'target' (the entity that was hit by the ray-cast)."
@@ -920,9 +965,17 @@
 						"$ref": "../actions/bientity.json",
 						"description": "If specified, this bi-entity action type will be executed on either or both the 'actor' (the entity that has the power) or 'target' (the entity that was hit by the ray-cast)."
 					},
+					"entity_distance": {
+						"type": "number",
+						"description": "Determines the distance of the raycast for entities if `entity` is set to `true`. If absent, it will use the higher value between the entity's attack range (with Reach Entity Attributes compatibility) or the `distance` field."
+					},
 					"block_action": {
 						"$ref": "../actions/block.json",
 						"description": "If specified, this block action type will be executed on the block the ray-cast has hit."
+					},
+					"block_distance": {
+						"type": "number",
+						"description": "Determines the distance of the raycast for blocks if `block` is set to `true`. If absent, it will use the higher value between the entity's block reach (with Reach Entity Attributes compatibility) or the `distance` field."
 					},
 					"before_action": {
 						"$ref": "#",
@@ -959,8 +1012,7 @@
 						"default":false,
 						"description": "Determines if the command specified in the command_along_ray field should be executed only if the ray-cast has hit a block/entity."
 					}
-				},
-				"required": ["distance"]
+				}
 			}
 		},
 		{

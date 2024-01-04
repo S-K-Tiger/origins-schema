@@ -1,0 +1,42 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "origins_data_type_food_component",
+	"description": "An object which defines a new food component.",
+	"type": "object",
+	"properties": {
+		"hunger": {
+			"type": "integer",
+			"description": "The amount of hunger shanks the food component recovers upon consumption."
+		},
+		"saturation": {
+			"type": "number",
+			"description": "The amount of saturation to give the player upon consumption."
+		},
+		"meat": {
+			"type": "boolean",
+			"description": "Whether this food component counts as meat or not.",
+			"default": false
+		},
+		"always_edible": {
+			"type": "boolean",
+			"description": "Whether this food component is edible at full hunger or not.",
+			"default": false
+		},
+		"snack": {
+			"type": "boolean",
+			"description": "Whether this food component takes as long as dried kelp to eat (16 ticks) or not (32 ticks).",
+			"default": false
+		},
+		"effect": {
+			"$ref": "../data_types/status_effect_instance.json",
+			"description": "A status effect and the chance of it triggering upon consuming something with this food component."
+		},
+		"effects": {
+			"type": "array",
+			"description": "A status effect and the chance of it triggering upon consuming something with this food component.",
+			"items": {"$ref": "../data_types/status_effect_instance.json"},
+			"minItems": 1
+		}
+	},
+	"required": ["hunger", "saturation"]
+}

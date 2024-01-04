@@ -10,11 +10,9 @@
 			"examples": [
 				"origins:and", "origins:chance", "origins:choice", "origins:delay",
 				"origins:if_else_list", "origins:if_else", "origins:nothing", "origins:side",
-				"origins:consume", "origins:damage", "origins:merge_nbt", "origins:modify", "origins:remove_enchantment",
-
-				"origins:holder"
-			],
-			"$comment": "origins:holder was mentioned on the Discord but has not appeared in the docs yet."
+				"origins:consume", "origins:damage", "origins:holder", "origins:holder_action", "origins:merge_nbt", "origins:modify",
+				"origins:remove_enchantment"
+			]
 		}
 	},
 	"required": ["type"],
@@ -200,6 +198,24 @@
 						"type": "boolean",
 						"description": "Determines if this action should ignore the Unbreaking enchantment.",
 						"default": false
+					}
+				}
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": { "enum": ["origins:holder_action", "origins:holder"] } }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/item_action_types/holder_action/"
+			},
+			"then": {
+				"properties": {
+					"action": {
+						"$ref": "../actions/entity.json",
+						"description": "The entity action to execute on the holder of the item stack."
+					},
+					"entity_action": {
+						"$ref": "../actions/entity.json",
+						"description": "The same as the `action` field, but with a different name."
 					}
 				}
 			}

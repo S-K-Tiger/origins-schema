@@ -11,7 +11,7 @@
 			"examples": [
 				"origins:and", "origins:constant", "origins:or", "origins:offset",
 				"origins:adjacent", "origins:attachable", "origins:blast_resistance", "origins:block_entity", "origins:block_state",
-				"origins:block", "origins:distance_from_coordinates", "origins:exposed_to_sky", "origins:fluid", "origins:hardness",
+				"origins:block", "origins:command", "origins:distance_from_coordinates", "origins:exposed_to_sky", "origins:fluid", "origins:hardness",
 				"origins:height", "origins:in_tag", "origins:light_blocking", "origins:light_level",
 				"origins:movement_blocking", "origins:nbt", "origins:replacable", "origins:slipperiness", "origins:water_loggable"
 			]
@@ -195,6 +195,29 @@
 					}
 				},
 				"required": ["block"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:command"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/block_condition_types/command/"
+			},
+			"then": {
+				"properties": {
+					"command": {
+						"type": "string",
+						"description": "The command to execute."
+					},
+					"comparison": {
+						"description": "How to compare the stored result of the specified command to the specified value.",
+						"enum": ["<", "<=", ">", ">=", "==", "!="]
+					},
+					"compare_to": {
+						"type": "integer",
+						"description": "The value to compare the stored result of the specified command to."
+					}
+				},
+				"required": ["command", "comparison", "compare_to"]
 			}
 		},
 		{

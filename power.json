@@ -11,8 +11,8 @@
 			"examples": [
 				"origins:attribute_modify_transfer", "origins:attribute", "origins:burn", "origins:climbing", "origins:conditioned_attribute",
 				"origins:conditioned_restrict_armor", "origins:cooldown", "origins:creative_flight", "origins:damage_over_time",
-				"origins:disable_regen", "origins:effect_immunity", "origins:elytra_flight", "origins:entity_glow",
-				"origins:entity_group", "origins:exhaust", "origins:fire_immunity", "origins:fire_projectile", "origins:freeze",
+				"origins:disable_regen", "origins:edible_item", "origins:effect_immunity", "origins:elytra_flight", "origins:entity_glow",
+				"origins:entity_group", "origins:exhaust", "origins:fire_immunity", "origins:fire_projectile", "origins:freeze", "origins:game_event_listener",
 				"origins:grounded", "origins:ignore_water", "origins:inventory", "origins:invisibility", "origins:invulnerability",
 				"origins:item_on_item", "origins:keep_inventory", "origins:launch", "origins:lava_vision", "origins:model_color",
 				"origins:multiple", "origins:night_vision", "origins:overlay", "origins:particle", "origins:phasing", "origins:recipe",
@@ -22,15 +22,15 @@
 				"origins:walk_on_fluid",
 
 				"origins:action_on_being_used", "origins:action_on_block_break", "origins:action_on_block_use", "origins:action_on_callback",
-				"origins:action_on_entity_use", "origins:action_on_hit", "origins:action_on_item_use", "origins:action_on_land",
+				"origins:action_on_death", "origins:action_on_entity_use", "origins:action_on_hit", "origins:action_on_item_use", "origins:action_on_land",
 				"origins:action_on_wake_up", "origins:action_over_time", "origins:action_when_damage_taken", "origins:action_when_hit",
 				"origins:active_self", "origins:attacker_action_when_hit", "origins:self_action_on_hit", "origins:self_action_on_kill",
 				"origins:self_action_when_hit", "origins:target_action_on_hit",
 
 				"origins:modify_air_speed", "origins:modify_attribute", "origins:modify_block_render", "origins:modify_break_speed",
 				"origins:modify_camera_submersion", "origins:modify_crafting", "origins:modify_damage_dealt", "origins:modify_damage_taken",
-				"origins:modify_exhaustion", "origins:modify_falling", "origins:modify_fluid_render", "origins:modify_food",
-				"origins:modify_grindstone", "origins:modify_harvest", "origins:modify_healing", "origins:modify_insomnia_ticks",
+				"origins:modify_enchantment_level", "origins:modify_exhaustion", "origins:modify_falling", "origins:modify_fluid_render",
+				"origins:modify_food", "origins:modify_grindstone", "origins:modify_harvest", "origins:modify_healing", "origins:modify_insomnia_ticks",
 				"origins:modify_jump", "origins:modify_lava_speed", "origins:modify_player_spawn", "origins:modify_projectile_damage",
 				"origins:modify_slipperiness", "origins:modify_status_effect_amplifier", "origins:modify_status_effect_duration",
 				"origins:modify_swim_speed", "origins:modify_velocity", "origins:modify_xp_gain",
@@ -251,7 +251,8 @@
 					},
 					"hold_condition": {
 						"$ref": "./conditions/entity.json",
-						"description": "If specified and `allow_holding` is true, the entity that has the power will be able to 'hold onto the block' (not affected by gravity) if the entity is sneaking and if this condition is fulfilled."
+						"description": "If specified and `allow_holding` is `true`, the entity that has the power will be able to 'hold onto the block' (not affected by gravity) if this condition is fulfilled, otherwise, defaults to if the entity is sneaking.",
+						"default": {"type": "origins:sneaking"}
 					}
 				}
 			}
@@ -387,6 +388,56 @@
 					}
 				},
 				"required": ["damage"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:edible_item"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/power_types/edible_item/"
+			},
+			"then": {
+				"properties": {
+					"entity_action": {
+						"$ref": "./actions/entity.json",
+						"description": "If specified, this action will be executed on the player upon consuming an item."
+					},
+					"item_action": {
+						"$ref": "./actions/item.json",
+						"description": "If specified, this action will be executed on the item consumed by the player."
+					},
+					"result_item_action": {
+						"$ref": "./actions/item.json",
+						"description": "If specified, this action will be executed on the item that is given to the player as a result of consuming an item."
+					},
+					"item_condition": {
+						"$ref": "./conditions/item.json",
+						"description": "If specified, will only make the item edible and the specified actions will only be executed if this condition is fulfilled by the item."
+					},
+					"food_component": {
+						"$ref": "./data_types/food_component.json",
+						"description": "The food component that the item grants upon eating it."
+					},
+					"return_stack": {
+						"$ref": "./data_types/item_stack.json",
+						"description": "If specified, this item stack will be given to the player."
+					},
+					"consume_action": {
+						"enum": ["eat", "drink"],
+						"description": "Determines whether the action of consuming the item is considered \"eating\" (`\"eat\"`) or \"drinking\" (`\"drink\"`).",
+						"default": "eat"
+					},
+					"consume_sound": {
+						"type": "string",
+						"description": "If specified, the sound event with this namespace and ID will be played when the item is eaten.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+					},
+					"priority": {
+						"type": "integer",
+						"description": "Determines the priority of which the power will apply its modification to the item. Must be higher than 0 if the item is already edible.",
+						"default": 0
+					}
+				},
+				"required": ["food_component"]
 			}
 		},
 		{
@@ -596,6 +647,66 @@
 		},
 		{
 			"if": {
+				"properties": { "type": {"const":"origins:game_event_listener"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/power_types/game_event_listener/"
+			},
+			"then": {
+				"properties": {
+					"bientity_action": {
+						"$ref": "./actions/bientity.json",
+						"description": "If specified, this action will be executed on either or both the 'actor' (the entity that emmited the game event or vibration) and 'target' (the entity that has the power) entities."
+					},
+					"bientity_condition": {
+						"$ref": "./conditions/bientity.json",
+						"description": "If specified, the specified actions will only be executed if this condition is fulfilled by either or both 'actor' (the entity that emmited the game event or vibration) and 'target' (the entity that has the power) entities."
+					},
+					"block_action": {
+						"$ref": "./actions/block.json",
+						"description": "If specified, this block action type will be executed at the position where the game event or vibration was emitted."
+					},
+					"block_condition": {
+						"$ref": "./conditions/block.json",
+						"description": "If specified, only executes the actions if the game event or vibration is emitted by a block that fulfills the block condition."
+					},
+					"cooldown": {
+						"type": "integer",
+						"description": "Interval of ticks this power needs to recharge before being able to listen to game events or vibrations again.",
+						"default": 1
+					},
+					"hud_render": {
+						"$ref": "./data_types/hud_render.json",
+						"description": "Determines how the cooldown of this power is visualized on the HUD.",
+						"default": {"should_render": false}
+					},
+					"event": {
+						"type": "string",
+						"description": "If specified, will make the power only listen for the game events with this namespace and IDs.\nSee https://minecraft.wiki/w/Sculk_Sensor?oldid=2099339#Vibration_amplitudes for a list of vanilla game events you can check for.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+					},
+					"events": {
+						"type": "array",
+						"description": "If specified, will make the power only listen for the game events with these namespace and IDs.\nSee https://minecraft.wiki/w/Sculk_Sensor?oldid=2099339#Vibration_amplitudes for a list of vanilla game events you can check for.",
+						"items": {
+							"type": "string",
+							"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						},
+						"minItems": 1
+					},
+					"event_tag": {
+						"type": "string",
+						"description": "If specified, will make the power only listen for the game events inside game event tag.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+					},
+					"show_particle": {
+						"type": "boolean",
+						"description": "Determines whether the vibration should emit a particle effect.",
+						"default": true
+					}
+				}
+			}
+		},
+		{
+			"if": {
 				"properties": { "type": {"const":"origins:inventory"} }, "required": ["type"],
 				"$comment": "https://origins.readthedocs.io/en/latest/types/power_types/inventory/"
 			},
@@ -650,6 +761,10 @@
 						"description": "Determines whether the glowing outline should be shown or not.",
 						"type": "boolean",
 						"default": false
+					},
+					"bientity_action": {
+						"$ref": "./conditions/bientity.json",
+						"description": "If specified, the 'target' will only be invisible to 'actors' (either the player or mobs that may see the target) if the bi-entity condition is fulfilled by either or both of them."
 					}
 				}
 			}
@@ -708,6 +823,11 @@
 					"entity_action": {
 						"$ref": "./actions/entity.json",
 						"description": "If specified, this action will be executed on the player after they used an item on an item."
+					},
+					"click_type": {
+						"enum": [0, "primary", 1, "secondary"],
+						"description": "Determines whether to execute the actions if the player does a right-click (`0` or `\"primary\"`) or left-click (`1` or `\"secondary\"`) action.",
+						"default": "secondary"
 					}
 				}
 			}
@@ -1539,6 +1659,29 @@
 		},
 		{
 			"if": {
+				"properties": { "type": {"const":"origins:action_on_death"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/power_types/action_on_death/"
+			},
+			"then": {
+				"properties": {
+					"bientity_action": {
+						"$ref": "./actions/bientity.json",
+						"description": "The action to be executed on either or both 'actor' (the entity that killed the target) and 'target' (the entity that died) entities."
+					},
+					"bientity_condition": {
+						"$ref": "./conditions/bientity.json",
+						"description": "If specified, the action will only execute when this condition is fulfilled by either or both 'actor' (the entity that killed the target) and 'target' (the entity that died) entities."
+					},
+					"damage_condition": {
+						"$ref": "./conditions/damage.json",
+						"description": "If specified, the action will only execute when this condition holds for the damage that was dealt by the 'actor' (the entity that killed the target) entity."
+					}
+				},
+				"required": ["bientity_action"]
+			}
+		},
+		{
+			"if": {
 				"properties": { "type": {"const":"origins:action_on_hit"} }, "required": ["type"],
 				"$comment": "https://origins.readthedocs.io/en/latest/types/power_types/action_on_hit/"
 			},
@@ -2022,7 +2165,7 @@
 					"recipe": {
 						"type": "string",
 						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
-						"description": "If specified, modifies the result item of the recipe that matches the specified namespace and ID.\nThis power type cannot modify the result item from recipes added by the Recipe Power Type."
+						"description": "If specified, modifies the result item of the recipe that matches the specified namespace and ID."
 					},
 					"item_action": {
 						"$ref": "./actions/item.json",
@@ -2141,6 +2284,35 @@
 					}
 				},
 				"oneOf": [ {"required": ["modifier"]}, {"required": ["modifiers"]} ]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:modify_enchantment_level"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/power_types/modify_enchantment_level/"
+			},
+			"then": {
+				"properties": {
+					"enchantment": {
+						"type": "string",
+						"description": "ID of the enchantment to apply/modify the level of to the entity., e.g. `minecraft:protection`.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+					},
+					"item_condition": {
+						"$ref": "./conditions/item.json",
+						"description": "If specified, only applies/modifies the level of the specified enchantment to/from the entity if the item condition is fulfilled by the item."
+					},
+					"modifier": {
+						"$ref": "./data_types/modifier.json",
+						"description": "If specified, this modifier will be applied to the current level of the specified enchantment from the entity."
+					},
+					"modifiers": {
+						"type": "array",
+						"description": "If specified, these modifiers will be applied to the current level of the specified enchantment from the entity.",
+						"items": {"$ref": "./data_types/modifier.json"}
+					}
+				},
+				"oneOf": [ {"required": ["modifier", "enchantment"]}, {"required": ["modifiers", "enchantment"]} ]
 			}
 		},
 		{
@@ -2775,6 +2947,11 @@
 						"type": "boolean",
 						"description": "Determines whether the spawnpoint of the player is set upon right-clicking a bed while being prevented. (similar to what happens when you right-click a bed while it's daytime)",
 						"default": false
+					},
+					"priority": {
+						"type": "integer",
+						"description": "Determines the priority of which power will prevent the player to sleep, set their spawn and display a message. The power with `set_spawn_point` set to `true` and the highest `priority` value will be prioritized.",
+						"default": 0
 					}
 				}
 			},

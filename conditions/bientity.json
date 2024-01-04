@@ -10,8 +10,8 @@
 			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 			"examples": [
 				"origins:and", "origins:constant", "origins:or",
-				"origins:actor_condition", "origins:both", "origins:either", "origins:invert", "origins:target_condition", "origins:undirected",
-				"origins:attack_target", "origins:attacker", "origins:can_see", "origins:distance", "origins:owner",
+				"origins:actor_condition", "origins:both", "origins:either", "origins:equal", "origins:invert", "origins:target_condition",
+				"origins:undirected", "origins:attack_target", "origins:attacker", "origins:can_see", "origins:distance", "origins:owner",
 				"origins:relative_rotation", "origins:riding_recursive", "origins:riding_root", "origins:riding"
 			]
 		},

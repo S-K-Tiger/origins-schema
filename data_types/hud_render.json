@@ -30,6 +30,12 @@
 			"default": 0,
 			"minimum": 0
 		},
+		"icon_index": {
+			"type": "integer",
+			"description": "The indexed position of the icon on the sprite to use. Please note that indexes start at 0.",
+			"default": 0,
+			"minimum": 0
+		},
 		"condition": {
 			"$ref": "../conditions/entity.json",
 			"description": "If set (and should_render is true), the bar will only display when the entity with the power fulfills this condition."

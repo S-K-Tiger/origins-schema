@@ -10,7 +10,7 @@
 			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
 			"examples": [
 				"origins:and", "origins:constant", "origins:or",
-				"origins:amount", "origins:attacker", "origins:in_tag", "origins:name", "origins:projectile"
+				"origins:amount", "origins:attacker", "origins:in_tag", "origins:name", "origins:projectile", "origins:type"
 			]
 		},
 		"inverted": {
@@ -171,6 +171,23 @@
 						"description": "If set, the check will only pass if the projectile entity fulfills this condition."
 					}
 				}
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:type"} },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/damage_condition_types/type/"
+			},
+			"then": {
+				"properties": {
+					"damage_type": {
+						"type": "string",
+						"description": "The ID of the damage type to compare the damage source to.",
+						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+					}
+				},
+				"required": ["damage_type"]
 			}
 		}
 	]

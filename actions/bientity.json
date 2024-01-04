@@ -288,13 +288,13 @@
 						"examples": ["minecraft:cramming", "minecraft:on_fire"]
 					},
 					"modifier": {
-						"$ref": "./data_types/attributed_modifier.json",
+						"$ref": "../data_types/attributed_modifier.json",
 						"description": "If specified, this modifier will be applied to the damage taken by the 'target' entity."
 					},
 					"modifiers": {
 						"type": "array",
 						"description": "If specified, these modifiers will be applied to the damage taken by the 'target' entity.",
-						"items": {"$ref": "./data_types/attributed_modifier.json"}
+						"items": {"$ref": "../data_types/attributed_modifier.json"}
 					}
 				},
 				"required": ["amount", "damage_type"],

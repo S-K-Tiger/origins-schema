@@ -7,12 +7,13 @@
 		"type": {
 			"type": "string",
 			"description": "ID and namespace of the bientity action to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/bientity_action_types/",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
 				"origins:and", "origins:chance", "origins:choice", "origins:delay", "origins:if_else_list", "origins:if_else",
 				"origins:nothing", "origins:side",
-				"origins:actor_action", "origins:invert", "origins:target_action",
-				"origins:add_velocity", "origins:damage", "origins:mount", "origins:set_in_love", "origins:tame"
+				"origins:add_to_set", "origins:actor_action", "origins:invert", "origins:target_action",
+				"origins:add_velocity", "origins:damage", "origins:mount", "origins:remove_from_set", "origins:set_in_love",
+				"origins:tame"
 			]
 		}
 	},
@@ -217,6 +218,26 @@
 		},
 		{
 			"if": {
+				"properties": { "type": {"const":"origins:add_to_set"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/bientity_action_types/add_to_set/"
+			},
+			"then": {
+				"properties": {
+					"set": {
+						"type": "string",
+						"description": "The ID of the power to add the target entity into.",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
+					},
+					"time_limit": {
+						"type": "integer",
+						"description": "If specified, this will determine how long the target entity will be stored in the specified power in ticks."
+					}
+				},
+				"required": ["set"]
+			}
+		},
+		{
+			"if": {
 				"properties": { "type": {"const":"origins:add_velocity"} }, "required": ["type"],
 				"$comment": "https://origins.readthedocs.io/en/latest/types/bientity_action_types/add_velocity/"
 			},
@@ -284,7 +305,7 @@
 					"damage_type": {
 						"description": "The damage type to be used. Controls e.g. the death message, invulnerabilities (e.g. towards fire), or whether armor is taken into account.",
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:cramming", "minecraft:on_fire"]
 					},
 					"modifier": {
@@ -301,6 +322,22 @@
 				"not": {
 					"required": ["modifier", "modifiers"]
 				}
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:remove_from_set"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/bientity_action_types/remove_from_set/"
+			},
+			"then": {
+				"properties": {
+					"set": {
+						"type": "string",
+						"description": "The ID of the power to remove the target entity from.",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
+					}
+				},
+				"required": ["set"]
 			}
 		}
 	]

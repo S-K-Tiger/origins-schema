@@ -7,12 +7,12 @@
 		"type": {
 			"type": "string",
 			"description": "ID and namespace of the bientity condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/bientity_condition_types/",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
-				"origins:and", "origins:constant", "origins:or",
+				"origins:and", "origins:chance", "origins:constant", "origins:or",
 				"origins:actor_condition", "origins:both", "origins:either", "origins:equal", "origins:invert", "origins:target_condition",
-				"origins:undirected", "origins:attack_target", "origins:attacker", "origins:can_see", "origins:distance", "origins:owner",
-				"origins:relative_rotation", "origins:riding_recursive", "origins:riding_root", "origins:riding"
+				"origins:undirected", "origins:attack_target", "origins:attacker", "origins:can_see", "origins:distance", "origins:in_set",
+				"origins:owner", "origins:relative_rotation", "origins:riding_recursive", "origins:riding_root", "origins:riding"
 			]
 		},
 		"inverted": {
@@ -38,6 +38,21 @@
 					}
 				},
 				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:chance"} }, "required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"chance": {
+						"type": "number",
+						"description": "The value to compare the randomly generated number to.",
+						"exclusiveMinimum": 0, "exclusiveMaximum": 1
+					}
+				},
+				"required": ["chance"]
 			}
 		},
 		{
@@ -192,6 +207,22 @@
 					}
 				},
 				"required": ["comparison", "compare_to"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:in_set"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/bientity_condition_types/in_set/"
+			},
+			"then": {
+				"properties": {
+					"set": {
+						"type": "string",
+						"description": "The ID of the power to check whether the target entity is in.",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
+					}
+				},
+				"required": ["set"]
 			}
 		},
 		{

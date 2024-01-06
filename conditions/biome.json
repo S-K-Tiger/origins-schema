@@ -7,9 +7,9 @@
 		"type": {
 			"type": "string",
 			"description": "ID and namespace of the biome condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/biome_condition_types/",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
-				"origins:and", "origins:constant", "origins:or",
+				"origins:and", "origins:chance", "origins:constant", "origins:or",
 				"origins:high_humidity", "origins:in_tag", "origins:precipitation", "origins:temperature"
 			]
 		},
@@ -36,6 +36,21 @@
 					}
 				},
 				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:chance"} }, "required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"chance": {
+						"type": "number",
+						"description": "The value to compare the randomly generated number to.",
+						"exclusiveMinimum": 0, "exclusiveMaximum": 1
+					}
+				},
+				"required": ["chance"]
 			}
 		},
 		{
@@ -99,7 +114,7 @@
 					"tag": {
 						"description": "The namespace and ID of the tag which the biome should be in to pass the check.",
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					}
 				},
 				"required": ["tag"]

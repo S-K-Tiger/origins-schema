@@ -19,7 +19,7 @@
 			"description": "The ID(s) of the power(s) to grant to entities globally.",
 			"items": {
 				"type": ["string"],
-				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+				"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 			},
 			"minItems":1,
 			"uniqueItems": true

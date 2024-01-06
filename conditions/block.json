@@ -7,9 +7,9 @@
 		"type": {
 			"type": "string",
 			"description": "ID and namespace of the block condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/block_condition_types/",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
-				"origins:and", "origins:constant", "origins:or", "origins:offset",
+				"origins:and", "origins:chance", "origins:constant", "origins:or", "origins:offset",
 				"origins:adjacent", "origins:attachable", "origins:blast_resistance", "origins:block_entity", "origins:block_state",
 				"origins:block", "origins:command", "origins:distance_from_coordinates", "origins:exposed_to_sky", "origins:fluid", "origins:hardness",
 				"origins:height", "origins:in_tag", "origins:light_blocking", "origins:light_level",
@@ -39,6 +39,21 @@
 					}
 				},
 				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:chance"} }, "required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"chance": {
+						"type": "number",
+						"description": "The value to compare the randomly generated number to.",
+						"exclusiveMinimum": 0, "exclusiveMaximum": 1
+					}
+				},
+				"required": ["chance"]
 			}
 		},
 		{
@@ -190,7 +205,7 @@
 					"block": {
 						"type": "string",
 						"description": "The namespace and ID of the block that this block needs to be to pass the check.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:diamond_block", "minecraft:emerald_block"]
 					}
 				},
@@ -344,7 +359,7 @@
 					"tag": {
 						"type": "string",
 						"description": "The namespace and ID of the tag which the block should be in to pass the check.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:base_stone_overworld"]
 					}
 				},

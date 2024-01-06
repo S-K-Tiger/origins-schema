@@ -8,12 +8,12 @@
 		"properties": {
 			"item": {
 				"type": "string",
-				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+				"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 				"description": "ID of a registered item."
 			},
 			"tag": {
 				"type": "string",
-				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+				"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 				"description": "ID of an item tag.\nWill be ignored if item is set."
 			}
 		},
@@ -25,12 +25,12 @@
 	"properties": {
 		"item": {
 			"type": "string",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"description": "ID of a registered item."
 		},
 		"tag": {
 			"type": "string",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"description": "ID of an item tag.\nWill be ignored if item is set."
 		}
 	},

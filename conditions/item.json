@@ -7,13 +7,13 @@
 		"type": {
 			"type": "string",
 			"description": "ID and namespace of the item condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/item_condition_types/",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
-				"origins:and", "origins:constant", "origins:or",
+				"origins:and", "origins:chance", "origins:constant", "origins:or",
 				"origins:amount", "origins:armor_value", "origins:durability", "origins:empty", "origins:enchantable", "origins:enchantment",
 				"origins:fireproof", "origins:food", "origins:fuel", "origins:harvest_level", "origins:has_power", "origins:ingredient",
-				"origins:is_damageable", "origins:is_equippable", "origins:meat", "origins:nbt", "origins:power_count", "origins:relative_durability",
-				"origins:smeltable"
+				"origins:is_damageable", "origins:is_equippable", "origins:equippable", "origins:meat", "origins:nbt", "origins:power_count",
+				"origins:relative_durability", "origins:smeltable"
 			]
 		},
 		"inverted": {
@@ -39,6 +39,21 @@
 					}
 				},
 				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:chance"} }, "required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"chance": {
+						"type": "number",
+						"description": "The value to compare the randomly generated number to.",
+						"exclusiveMinimum": 0, "exclusiveMaximum": 1
+					}
+				},
+				"required": ["chance"]
 			}
 		},
 		{
@@ -143,7 +158,7 @@
 					"enchantment": {
 						"type": "string",
 						"description": "ID of the enchantment of interest.\nIf not set, amount of enchantments will be checked instead.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:aqua_affinity", "minecraft:bane_of_arthropods", "minecraft:blast_protection", "minecraft:channeling", "minecraft:protection", "minecraft:fortune"]
 					},
 					"comparison": {
@@ -211,7 +226,7 @@
 					"power": {
 						"description": "The ID of the power to check for.",
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					},
 					"slot": {
 						"description": "If specified, this will check if the power embedded to the item is assigned to this equipment slot.",
@@ -235,6 +250,21 @@
 					}
 				},
 				"required": ["ingredient"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": { "enum": ["origins:is_equippable", "origins:equippable"] } },
+				"require": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/item_condition_types/is_equippable/"
+			},
+			"then": {
+				"properties": {
+					"equipment_slot": {
+						"enum": ["head", "chest", "legs", "feet", "offhand"],
+						"description": "If specified, checks if the item is equippable in the specified equipment slot. Accepts \"head\", \"chest\", \"legs\", \"feet\", or \"offhand\"."
+					}
+				}
 			}
 		},
 		{

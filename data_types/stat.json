@@ -7,7 +7,7 @@
 		"type": {
 			"description": "The type of the statistic.\nSee: https://minecraft.wiki/w/Statistics#Resource_location for a list of vanilla statistic types and names.",
 			"type": "string",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
 				"minecraft:custom", "minecraft:mined", "minecraft:broken", "minecraft:crafted", "minecraft:used", "minecraft:picked_up",
 				"minecraft:dropped", "minecraft:killed", "minecraft:killed_by"
@@ -16,7 +16,7 @@
 		"id": {
 			"description": "The name of the statistic; may depend on the specified type of the statistic.",
 			"type": "string",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 		}
 	}
 }

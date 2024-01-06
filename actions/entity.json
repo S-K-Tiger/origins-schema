@@ -6,19 +6,19 @@
 	"properties": {
 		"type": {
 			"type": "string",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
 				"origins:and", "origins:chance", "origins:choice", "origins:delay",
 				"origins:if_else_list", "origins:if_else", "origins:nothing", "origins:side",
-				"origins:add_velocity", "origins:add_xp", "origins:apply_effect", "origins:area_of_effect", "origins:block_action_at",
+				"origins:action_on_set", "origins:add_velocity", "origins:add_xp", "origins:apply_effect", "origins:area_of_effect", "origins:block_action_at",
 				"origins:change_resource", "origins:clear_effect", "origins:crafting_table", "origins:damage", "origins:dismount",
 				"origins:drop_inventory", "origins:emit_game_event", "origins:ender_chest", "origins:equipped_item_action",
 				"origins:execute_command", "origins:exhaust", "origins:explode", "origins:extinguish", "origins:feed", "origins:fire_projectile",
 				"origins:gain_air", "origins:give", "origins:grant_advancement", "origins:grant_power", "origins:heal", "origins:modify_death_ticks",
-				"origins:modify_inventory", "origins:modify_resource", "origins:modify_stat", "origins:passenger_action",
-				"origins:play_sound", "origins:raycast", "origins:replace_inventory", "origins:revoke_advancement", "origins:revoke_power",
-				"origins:riding_action", "origins:selector_action", "origins:set_fall_distance", "origins:set_on_fire",
-				"origins:spawn_effect_cloud", "origins:spawn_entity", "origins:spawn_particles", "origins:swing_hand", "origins:toggle",
+				"origins:modify_inventory", "origins:modify_resource", "origins:modify_stat", "origins:passenger_action", "origins:play_sound",
+				"origins:random_teleport", "origins:raycast", "origins:remove_power", "origins:replace_inventory", "origins:revoke_advancement",
+				"origins:revoke_all_powers", "origins:revoke_power", "origins:riding_action", "origins:selector_action", "origins:set_fall_distance",
+				"origins:set_on_fire", "origins:spawn_effect_cloud", "origins:spawn_entity", "origins:spawn_particles", "origins:swing_hand", "origins:toggle",
 				"origins:trigger_cooldown"
 			]
 		}
@@ -178,6 +178,40 @@
 		},
 		{
 			"if": {
+				"properties": { "type": {"const":"origins:action_on_set"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/action_on_set/"
+			},
+			"then": {
+				"properties": {
+					"set": {
+						"type": "string",
+						"description": "The ID of the power.",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
+					},
+					"bientity_action": {
+						"$ref": "../actions/bientity.json",
+						"description": "The bi-entity action to execute on both or either the actor and target.\nIn the context of this entity action type, the actor will be the entity that invoked the entity action while the target will be the entities within the power.\nThe action will be executed on the entities stored within the power regardless of their dimension."
+					},
+					"bientity_condition": {
+						"$ref": "../conditions/bientity.json",
+						"description": "If specified, only execute the bi-entity action if this bi-entity condition is fulfilled by both or either the actor and target.\nIn the context of this entity action type, the actor will be the entity that invoked the entity action while the target will be the entities within the power."
+					},
+					"limit": {
+						"type": "integer",
+						"description": "Determines the max amount of times the entity action type should iterate and execute the bi-entity action on the entities stored within the power. If the value is less than or equal to 0, then there will be no limit.",
+						"default": 0
+					},
+					"reverse": {
+						"type": "boolean",
+						"description": "Determines whether to reverse the order of the entities within the power when processing.",
+						"default": false
+					}
+				},
+				"required": ["set", "bientity_action"]
+			}
+		},
+		{
+			"if": {
 				"properties": { "type": {"const":"origins:add_velocity"} }, "required": ["type"],
 				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/add_velocity/"
 			},
@@ -287,6 +321,11 @@
 						"description": "Determines the radius of the area.",
 						"default": 16.0
 					},
+					"shape": {
+						"enum": ["cube", "chebyshev", "star", "manhattan", "sphere", "euclidean"],
+						"description": "Determines the shape of the area.",
+						"default": "cube"
+					},
 					"bientity_action": {
 						"$ref": "../actions/bientity.json",
 						"description": "If specified, this bi-entity action type may be executed on either or both the actor (the entity that has the power) and target (the entities within the specified radius)."
@@ -295,7 +334,7 @@
 						"$ref": "../conditions/bientity.json",
 						"description": "If specified, only execute the specified bi-entity action if this bi-entity condition type is fulfilled by either or both the 'actor' (the entity that has the power) or 'target' (the entities within the specified radius)."
 					},
-					"include_target": {
+					"/^include_actor$|^include_target$/": {
 						"type":"boolean",
 						"description": "Determines whether the entity this action was executed on is included in the radius check.",
 						"default": false
@@ -328,7 +367,7 @@
 				"properties": {
 					"resource": {
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"description": "The namespace and ID of the power that uses the Resource (Power Type) or has a built-in cooldown."
 					},
 					"change": {
@@ -354,7 +393,7 @@
 					"effect": {
 						"type": "string",
 						"description": "If specified, the status effect with this namespace and ID will be cleared. If not specified, all status effects will be cleared.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:poison"]
 					}
 				}
@@ -379,7 +418,7 @@
 					"damage_type": {
 						"description": "The damage type to be used. Controls e.g. the death message, invulnerabilities (e.g. towards fire), or whether armor is taken into account.",
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:cramming", "minecraft:on_fire"]
 					},
 					"modifier": {
@@ -432,7 +471,7 @@
 					"power": {
 						"description": "If specified, the items in the inventory of this power will be dropped instead of the items in the entity's inventory if `inventory_type` is set to `\"power\"`.",
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					},
 					"throw_randomly": {
 						"description": "If `true`, items will be thrown in random directions instead of being normally dropped, similar to how items are dropped when you die.",
@@ -459,7 +498,7 @@
 				"properties": {
 					"event": {
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"description": "The namespace and ID of a game event. See https://minecraft.wiki/w/Sculk_Sensor#Vibration_amplitudes for a list of game events you can use.",
 						"examples": [
 							"minecraft:step",
@@ -606,7 +645,7 @@
 					"entity_type": {
 						"type": "string",
 						"description": "The identifier of the projectile or entity that will be launched.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					},
 					"divergence": {
 						"type":"number",
@@ -682,7 +721,7 @@
 				"properties": {
 					"advancement": {
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"description": "The namespace and ID of the advancement to be granted/revoked from the player.",
 						"examples": ["minecraft:adventure/arbalistic"]
 					},
@@ -716,13 +755,13 @@
 				"properties": {
 					"power": {
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"description": "The namespace and ID of the power to be granted/revoked to/from the entity.",
 						"examples": ["origins:elytra"]
 					},
 					"source": {
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"description": "The namespace and ID of the source of the power.",
 						"examples": ["origins:elytrian"]
 					}
@@ -797,7 +836,7 @@
 					"power": {
 						"description": "If specified, the items in the inventory of this power will be modified instead of the items in the entity's inventory if `inventory_type` is set to `\"power\"`.",
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					},
 					"process_mode": {
 						"description": "Determines how the affected item stacks in the specified inventory are modified.",
@@ -827,7 +866,7 @@
 					"resource": {
 						"description": "This power will have its value modified; as long as the power is using the Resource (Power Type) or the Cooldown (Power Type).",
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					}
 				},
 				"required": ["modifier", "resource"]
@@ -889,7 +928,7 @@
 					"sound": {
 						"type": "string",
 						"description": "The ID of the sound event to play.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:entity.chicken.egg"]
 					},
 					"category": {
@@ -909,6 +948,61 @@
 					}
 				},
 				"required": ["sound"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:random_teleport"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/random_teleport/"
+			},
+			"then": {
+				"properties": {
+					"area_width": {
+						"type": "number",
+						"description": "Determines the width of the area.",
+						"default": 8.0
+					},
+					"area_height": {
+						"type": "number",
+						"description": "Determines the height of the area.",
+						"default": 8.0
+					},
+					"heightmap": {
+						"type": "string",
+						"description": "If specified, the location will be anchored to the of the specified surface of the world."
+					},
+					"attempts": {
+						"type": "integer",
+						"description": "Determines how many attempts the entity should be teleported to a random location. Defaults to `area_width` * 2 + `area_height` * 2.",
+						"minimum": 1
+					},
+					"landing_block_condition": {
+						"$ref": "../conditions/block.json",
+						"description": "If specified, the entity will only be teleported on top of a block that fulfills this block condition. Otherwise, the entity will only be teleported on blocks that block movement/have solid collision."
+					},
+					"landing_condition": {
+						"$ref": "../conditions/entity.json",
+						"description": "If specified, the entity will only be teleported to a location if the entity fulfills this entity condition. Otherwise, the entity will only be teleported to a location that is empty (e.g: no blocks and fluids.)"
+					},
+					"landing_offset": {
+						"$ref": "../data_types/vector.json",
+						"description": "Determines the offset of the location of where the entity will be teleported. If the X and Z offsets are specified, the X and Z coordinates of the location will be divided (floored) before applying the offset.",
+						"default": {"x": 0, "y": 0, "z": 0}
+					},
+					"loaded_chunks_only": {
+						"type": "boolean",
+						"description": "Determines whether the entity should only be teleported in loaded chunks. It is recommended to keep this set to `true` for performance reasons.",
+						"default": true
+					},
+					"success_action": {
+						"$ref": "#",
+						"description": "If specified, this entity action will be executed on the entity after it's been successfully teleported to a random location."
+					},
+					"fail_action": {
+						"$ref": "#",
+						"description": "If specified, this entity action will be executed on the entity upon failing to be teleported on a random location."
+					}
+				}
 			}
 		},
 		{
@@ -1017,6 +1111,22 @@
 		},
 		{
 			"if": {
+				"properties": { "type": {"const":"origins:remove_power"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/remove_power/"
+			},
+			"then": {
+				"properties": {
+					"power": {
+						"type": "string",
+						"description": "The ID of the power to remove from the entity.",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
+					}
+				},
+				"required": ["power"]
+			}
+		},
+		{
+			"if": {
 				"properties": { "type": {"const":"origins:replace_inventory"} }, "required": ["type"],
 				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/replace_inventory/"
 			},
@@ -1051,7 +1161,7 @@
 					"power": {
 						"description": "If specified, the items in the inventory of this power will be replaced instead of the items in the entity's inventory if `inventory_type` is set to `\"power\"`.",
 						"type": "string",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					},
 					"stack": {
 						"description": "The item to use as a replacement for the affected items.",
@@ -1064,6 +1174,22 @@
 					}
 				},
 				"required": ["stack"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:revoke_all_powers"} }, "required": ["type"],
+				"$comment": "https://origins.readthedocs.io/en/latest/types/entity_action_types/revoke_all_powers/"
+			},
+			"then": {
+				"properties": {
+					"source": {
+						"type": "string",
+						"description": "The ID of the source to revoke powers from.",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
+					}
+				},
+				"required": ["source"]
 			}
 		},
 		{
@@ -1194,7 +1320,7 @@
 					"entity_type": {
 						"type": "string",
 						"description": "The namespace and ID of the entity type that will be spawned.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:zombie"]
 					},
 					"tag": {
@@ -1205,6 +1331,10 @@
 					"entity_action": {
 						"$ref": "#",
 						"description": "If specified, the specified entity action type will be executed on the entity that will be spawned when it is spawned."
+					},
+					"bientity_action": {
+						"$ref": "../actions/bientity.json",
+						"description": "If specified, this bi-entity action will be executed on either or both the actor (the entity that invoked the entity action) and the target (the spawned entity)."
 					}
 				},
 				"required": ["entity_type"]
@@ -1220,6 +1350,10 @@
 					"particle": {
 						"$ref": "../data_types/particle_effect.json",
 						"description": "The particle type that will be spawned."
+					},
+					"bientity_condition": {
+						"$ref": "../conditions/bientity.json",
+						"description": "If specified, the particle will only be visible if this bi-entity condition is fulfilled by either or both the entity that has the power and the entity looking at the entity that has the power."
 					},
 					"count": {
 						"type":"integer",
@@ -1239,12 +1373,22 @@
 					"spread": {
 						"$ref": "../data_types/vector.json",
 						"description": "Determines the size of the three-dimensional cuboid volume to spawn the specified particle type in.",
-						"default": {"x": 0.5, "y": 0.25, "z": 0.5}
+						"default": {"x": 0.5, "y": 0.5, "z": 0.5}
+					},
+					"offset_x": {
+						"type":"number",
+						"description": "The offset of where the particle will be centered in the X axis.",
+						"default": 0.0
 					},
 					"offset_y": {
 						"type":"number",
 						"description": "The offset of where the particle will be centered in the Y axis.",
 						"default": 0.5
+					},
+					"offset_z": {
+						"type":"number",
+						"description": "The offset of where the particle will be centered in the Z axis.",
+						"default": 0.0
 					}
 				},
 				"required": ["particle", "count"]
@@ -1275,7 +1419,7 @@
 					"power": {
 						"type": "string",
 						"description": "The namespace and ID of the power that uses the Toggle (Power Type).",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["origins:phantomize"]
 					}
 				},
@@ -1291,7 +1435,7 @@
 					"power": {
 						"type": "string",
 						"description": "The namespace and ID of the power that will be triggered.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["origins:launch_into_air"]
 					}
 				},

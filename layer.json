@@ -13,7 +13,7 @@
 			"description": "Defines the origins that should be in this layer. Identifier strings and Conditioned Origin objects can be mixed in the same array.",
 			"items": {
 				"type": ["string", "object"],
-				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+				"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 				"properties": {
 					"condition": {"$ref": "./conditions/entity.json"},
 					"origins": {
@@ -22,7 +22,7 @@
 						"items": {
 							"type": "string",
 							"description": "Identifier string",
-							"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+							"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 						}
 					}
 				},
@@ -83,14 +83,14 @@
 			"items": {
 				"type": "string",
 				"description": "Identifier string",
-				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+				"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 			},
 			"uniqueItems": true
 		},
 		"default_origin": {
 			"description": "If set, the origin with this namespace and ID will automatically be chosen for a new player. If an orb of origin is used later on, the player will be able to choose another origin then and the default_origin will not apply. Could for example be used to make all players start as human, and then use the orb as a progression item to select an origin.",
 			"type": "string",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 		},
 		"auto_choose": {
 			"type": "boolean",

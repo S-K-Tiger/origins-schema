@@ -9,7 +9,7 @@
 			"description": "The namespace and IDs of the powers this origin should have.",
 			"items": {
 				"type": "string",
-				"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+				"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 				"examples": [
 					"origins:fall_immunity", "origins:aerial_combatant", "origins:aqua_affinity", "origins:aquatic",
 					"origins:arthropod", "origins:more_kinetic_damage", "origins:burning_wrath", "origins:carnivore",
@@ -67,12 +67,12 @@
 					"condition": {
 						"type": "string",
 						"description": "The namespace and ID of an advancement which should trigger this upgrade.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					},
 					"origin": {
 						"type": "string",
 						"description": "The namespace and ID of an origin the origin with this upgrade should upgrade to.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 					},
 					"announcement": {
 						"type": "string",

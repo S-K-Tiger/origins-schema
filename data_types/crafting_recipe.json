@@ -10,7 +10,7 @@
 		},
 		"id": {
 			"type": "string",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"description": "An ID for this recipe. Has to be unique among all recipes, otherwise there will be a conflict."
 		},
 		"result": {
@@ -19,7 +19,7 @@
 			"properties": {
 				"item": {
 					"type": "string",
-					"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$"
+					"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$"
 				},
 				"count": {
 					"type": "integer",

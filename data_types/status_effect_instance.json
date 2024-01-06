@@ -7,7 +7,7 @@
 		"effect": {
 			"type": "string",
 			"description": "The identifier of the status effect.",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": ["minecraft:slowness", "minecraft:levitation", "minecraft:slow_falling"]
 		},
 		"duration": {

@@ -13,7 +13,7 @@
 		"font": {
 			"type": "string",
 			"description": "The resource location of the font for this component in the resource pack within assets/<namespace>/font.",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"default": "minecraft:default"
 		},
 		"bold": {
@@ -99,7 +99,7 @@
 								"properties": {
 									"id": {
 										"type": "string",
-										"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+										"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 										"description": "The item's resource location. Present `minecraft:air` if invalid."
 									},
 									"count": {
@@ -131,7 +131,7 @@
 									},
 									"type": {
 										"type":"string",
-										"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+										"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 										"description": "A string containing the type of the entity, as a resource location. Present `minecraft:pig` if invalid."
 									},
 									"id": {

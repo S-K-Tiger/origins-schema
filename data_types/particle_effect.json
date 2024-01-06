@@ -7,7 +7,7 @@
 		"type": {
 			"type": "string",
 			"description": "The namespace and ID of the particle type.\nRefer to https://minecraft.wiki/w/Particles#Particle_IDs for a list of vanilla particle type IDs that you can use.",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
 				"minecraft:ambient_entity_effect", "minecraft:angry_villager", "minecraft:ash", "minecraft:block",
 				"minecraft:block_marker", "minecraft:bubble", "minecraft:bubble_pop", "minecraft:bubble_column_up",
@@ -38,6 +38,6 @@
 		}
 	},
 	"required": ["type", "params"],
-	"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+	"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 	"examples": ["minecraft:happy_villager", "minecraft:note", {"type":"minecraft:dust","params":"0.922 0.314 0.314 2"}, {"type":"minecraft:block","params":"minecraft:ice"}]
 }

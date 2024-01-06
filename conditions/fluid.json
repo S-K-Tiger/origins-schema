@@ -7,9 +7,9 @@
 		"type": {
 			"type": "string",
 			"description": "ID and namespace of the fluid condition to evaluate.\nSee https://origins.readthedocs.io/en/latest/types/fluid_condition_types/",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"examples": [
-				"origins:and", "origins:constant", "origins:or",
+				"origins:and", "origins:chance", "origins:constant", "origins:or",
 				"origins:empty", "origins:in_tag", "origins:stil"
 			]
 		},
@@ -36,6 +36,21 @@
 					}
 				},
 				"required": ["conditions"]
+			}
+		},
+		{
+			"if": {
+				"properties": { "type": {"const":"origins:chance"} }, "required": ["type"]
+			},
+			"then": {
+				"properties": {
+					"chance": {
+						"type": "number",
+						"description": "The value to compare the randomly generated number to.",
+						"exclusiveMinimum": 0, "exclusiveMaximum": 1
+					}
+				},
+				"required": ["chance"]
 			}
 		},
 		{
@@ -79,7 +94,7 @@
 					"tag": {
 						"type": "string",
 						"description": "ID of the tag which the fluid should be in to pass the check.",
-						"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:water"]
 					}
 				},

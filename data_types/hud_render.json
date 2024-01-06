@@ -12,7 +12,7 @@
 		"sprite_location": {
 			"type": "string",
 			"description": "The path to the file in the assets which contains what the bar looks like. See https://origins.readthedocs.io/en/latest/misc/extras/sprites/ for a list of files included by default in the mod.",
-			"pattern": "^[a-z0-9\\-_\\.]+:[a-z0-9\\-_\\./]+$",
+			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"default": "origins:textures/gui/resource_bar.png",
 			"examples": [
 				"origins:textures/gui/resource_bar.png",
@@ -44,6 +44,10 @@
 			"type":"boolean",
 			"description": "If set to true, inverts the way the hud render process (it'll look like its value is being decreased).",
 			"default":false
+		},
+		"order": {
+			"type": "integer",
+			"description": "If specified, this determines the position of the HUD render when being rendered. The higher the `order` value is, the higher it is on the rendered HUD render stack."
 		}
 	}
 }

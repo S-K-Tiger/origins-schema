@@ -50,12 +50,12 @@
 			"default": 0
 		},
 		"name": {
-			"type": "string",
-			"description": "The display name of the origin. Can be a translation key which is localized in a language file, or the literal display name."
+			"$ref": "./data_types/text_component.json",
+			"description": "The display name of the origin."
 		},
 		"description": {
-			"type": "string",
-			"description": "The description of the origin. Can be a translation key which is localized in a language file, or the literal description."
+			"$ref": "./data_types/text_component.json",
+			"description": "The description of the origin."
 		},
 		"upgrades": {
 			"type": "array",

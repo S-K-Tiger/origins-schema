@@ -42,30 +42,30 @@
 			"default": false
 		},
 		"name": {
-			"type": "string",
-			"description": "The display name of the layer. Will show at the top of the GUI saying \"Choose your [name here]\". Can be a literal string or a translation key."
+			"$ref": "./data_types/text_component.json",
+			"description": "The display name of the layer. Will show at the top of the GUI saying \"Choose your [name here]\"."
 		},
 		"gui_title": {
 			"type":"object",
 			"description": "If specified, the choose/view origin title for the layer (the text that shows at the top of the GUI) will be overridden by this.",
 			"properties": {
 				"choose_origin": {
-					"type":"string",
+					"$ref": "./data_types/text_component.json",
 					"description": "If specified, this will override the title that shows up when choosing an origin in the layer."
 				},
 				"view_origin": {
-					"type":"string",
+					"$ref": "./data_types/text_component.json",
 					"description": "If specified, this will override the title that shows up when viewing an origin in the layer."
 				}
 			}
 		},
 		"missing_name": {
-			"type": "string",
-			"description": "The display name of the origin that will show when viewing the origin if no origin has been assigned to this layer. Can be a literal string or a translation key."
+			"$ref": "./data_types/text_component.json",
+			"description": "The display name of the origin that will show when viewing the origin if no origin has been assigned to this layer."
 		},
 		"missing_description": {
-			"type": "string",
-			"description": "The description of the origin that will show when viewing the origin if no origin has been assigned to this layer. Can be a literal string or a translation key."
+			"$ref": "./data_types/text_component.json",
+			"description": "The description of the origin that will show when viewing the origin if no origin has been assigned to this layer."
 		},
 		"allow_random": {
 			"type": "boolean",

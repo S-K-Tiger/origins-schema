@@ -1227,16 +1227,16 @@
 			"then": {
 				"properties": {
 					"selector": {
-						"description": "The selector to use for selecting entities. It can be the username of a player, the UUID of the entity or a target selector.",
+						"description": "The selector to use for selecting entities. It can be the username of a player, the UUID of the entity or a target selector.\nSee https://minecraft.wiki/w/Target_selectors",
 						"type": "string"
 					},
 					"bientity_action": {
 						"$ref": "../actions/bientity.json",
-						"description": "If specified, this action will be executed on either or both the actor and target entities."
+						"description": "If specified, this action will be executed on either or both the actor (the entity that invoked the entity action) and target (the entities that were selected by the specified `selector`) entities."
 					},
 					"bientity_condition": {
 						"$ref": "../conditions/bientity.json",
-						"description": "If specified, the specified action will only be executed if this condition is fulfilled by either or both the actor and target entities."
+						"description": "If specified, the specified action will only be executed if this condition is fulfilled by either or both the actor (the entity that invoked the entity action) and target (the entities that were selected by the specified `selector`) entities."
 					}
 				},
 				"required": ["selector"]

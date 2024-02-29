@@ -959,12 +959,12 @@
 				"properties": {
 					"area_width": {
 						"type": "number",
-						"description": "Determines the width of the area.",
+						"description": "Determines the width of the area.\nThe actual width and height of the available teleportation area is double the respective provided value, +1 for the block the player stands on in the very center.",
 						"default": 8.0
 					},
 					"area_height": {
 						"type": "number",
-						"description": "Determines the height of the area.",
+						"description": "Determines the height of the area.\nThe actual width and height of the available teleportation area is double the respective provided value, +1 for the block the player stands on in the very center.",
 						"default": 8.0
 					},
 					"heightmap": {

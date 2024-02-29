@@ -24,10 +24,6 @@
 			"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 			"description": "If specified, the value of this power will be used instead of the value specified in the value field."
 		},
-		"name": {
-			"type": "string",
-			"description": "A descriptive name for the modifier, describing where it comes from."
-		},
 		"modifier": {
 			"$ref": "../data_types/modifier.json",
 			"description": "If specified, this modifier will be applied to the value of the modifier."

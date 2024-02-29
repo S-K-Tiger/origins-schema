@@ -10,7 +10,7 @@
 		},
 		"saturation": {
 			"type": "number",
-			"description": "The amount of saturation to give the player upon consumption."
+			"description": "The amount of saturation to give the player upon consumption.\nThe actual food saturation level is determined by the `food * saturation * 2` formula."
 		},
 		"meat": {
 			"type": "boolean",

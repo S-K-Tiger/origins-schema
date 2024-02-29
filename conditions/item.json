@@ -161,6 +161,11 @@
 						"pattern": "^[a-z0-9\\-_\\.\\*]+:[a-z0-9\\-_\\./\\*]+$",
 						"examples": ["minecraft:aqua_affinity", "minecraft:bane_of_arthropods", "minecraft:blast_protection", "minecraft:channeling", "minecraft:protection", "minecraft:fortune"]
 					},
+					"use_modifications": {
+						"type": "boolean",
+						"description": "Determines whether to account for enchantments that were added/modified by unnatural means (e.g: via the Modify Enchantment Level Power.)",
+						"default": true
+					},
 					"comparison": {
 						"description": "How to compare the enchantment level, or the amount of enchantments, to the specified value.",
 						"enum": ["<", "<=", ">", ">=", "==", "!="]
